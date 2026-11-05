@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Undangan Premium | Naozi Printing</title>
+    <style>
+        :root { --ios-bg: #fdf6f6; --ios-accent: #8785a2; --ios-card: #FFFFFF; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--ios-bg); padding: 20px; color: #1c1c1e; padding-bottom: 110px; margin: 0; }
+        .container { max-width: 620px; margin: 0 auto; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: white; padding: 12px 16px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .top-nav a { text-decoration: none; color: var(--ios-accent); font-weight: 600; font-size: 14px; padding: 6px 12px; border-radius: 8px; background: #f4f4f8; }
+        .top-nav a:hover { background: var(--ios-accent); color: white; }
+        .card { background: var(--ios-card); border-radius: 14px; padding: 18px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(135, 133, 162, 0.1); }
+        .form-group { margin-bottom: 15px; border-bottom: 1px solid #f2f2f7; padding-bottom: 12px; }
+        .form-group:last-child { border: none; margin-bottom: 0; padding-bottom: 0; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #6c6c70; margin-bottom: 6px; }
+        input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #d1d1d6; border-radius: 8px; font-size: 15px; box-sizing: border-box; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--ios-accent); box-shadow: 0 0 0 3px rgba(135, 133, 162, 0.15); }
+        
+        .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e9e9eb; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+        input:checked + .slider { background-color: var(--ios-accent); }
+        input:checked + .slider:before { transform: translateX(20px); }
+        
+        .btn-save { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 580px; padding: 16px; background: var(--ios-accent); color: white; border: none; border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; z-index: 100; box-shadow: 0 8px 20px rgba(135, 133, 162, 0.4); transition: 0.2s; }
+        .btn-save:hover { filter: brightness(0.95); }
+        .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+        h2 { font-size: 18px; border-left: 4px solid var(--ios-accent); padding-left: 10px; margin: 25px 0 10px; color: #3a3a4c; }
+        .preview-img { width: 100%; height: 120px; object-fit: cover; border-radius: 10px; margin-top: 10px; background: #eee; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="top-nav">
+            <a href="index.html" target="_blank">Lihat Undangan</a>
+            <span style="font-weight: 700; color: #3a3a4c;">Editor Undangan</span>
+            <a href="guest.html">Kelola Tamu</a>
+        </div>
+
+        <!-- Tipe Undangan -->
+        <div class="card">
+            <div class="row">
+                <label style="color: #1c1c1e; font-size: 15px; margin: 0;">Jenis Undangan</label>
+                <select id="type" style="width: auto;" onchange="toggleFields()">
+                    <option value="wedding">Pernikahan</option>
+                    <option value="khitan">Khitanan</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Wedding Section -->
+        <div id="wedding-fields">
+            <h2>Mempelai Pria</h2>
+            <div class="card">
+                <div class="form-group"><label>Nama Lengkap</label><input type="text" id="groom_name" placeholder="Contoh: Muhammad Nazril Mokodompit"></div>
+                <div class="form-group"><label>Nama Panggilan</label><input type="text" id="groom_nickname" placeholder="Contoh: Aril"></div>
+                <div class="form-group"><label>Anak Ke- (Putra Ke-)</label><input type="text" id="groom_child_number" placeholder="Contoh: Pertama, Kedua, Bungsu"></div>
+                <div class="form-group"><label>Alamat Keluarga (Kediaman)</label><input type="text" id="groom_address" placeholder="Contoh: Condongcatur, Sleman"></div>
+                <div class="form-group"><label>URL Foto (Kosongkan untuk foto default tema)</label><input type="text" id="groom_photo" placeholder="img/img9.jpg atau URL foto" onchange="preview(this)"></div>
+                <div class="form-group"><label>Nama Ayah</label><input type="text" id="groom_father"></div>
+                <div class="form-group"><label>Nama Ibu</label><input type="text" id="groom_mother"></div>
+            </div>
+            <h2>Mempelai Wanita</h2>
+            <div class="card">
+                <div class="form-group"><label>Nama Lengkap</label><input type="text" id="bride_name" placeholder="Contoh: Cici Puspitasari Dakotalot"></div>
+                <div class="form-group"><label>Nama Panggilan</label><input type="text" id="bride_nickname" placeholder="Contoh: Cici"></div>
+                <div class="form-group"><label>Anak Ke- (Putri Ke-)</label><input type="text" id="bride_child_number" placeholder="Contoh: Pertama, Kedua, Bungsu"></div>
+                <div class="form-group"><label>Alamat Keluarga (Kediaman)</label><input type="text" id="bride_address" placeholder="Contoh: Desa Bai, Kec. Nuangan"></div>
+                <div class="form-group"><label>URL Foto (Kosongkan untuk foto default tema)</label><input type="text" id="bride_photo" placeholder="img/img8.jpg atau URL foto" onchange="preview(this)"></div>
+                <div class="form-group"><label>Nama Ayah</label><input type="text" id="bride_father"></div>
+                <div class="form-group"><label>Nama Ibu</label><input type="text" id="bride_mother"></div>
+            </div>
+        </div>
+
+        <!-- Khitan Section -->
+        <div id="khitan-fields" style="display:none;">
+            <h2>Detail Anak</h2>
+            <div class="card">
+                <div class="form-group"><label>Nama Lengkap</label><input type="text" id="khitan_name"></div>
+                <div class="form-group"><label>URL Foto</label><input type="text" id="khitan_photo" onchange="preview(this)"></div>
+                <div class="form-group"><label>Nama Orang Tua</label><input type="text" id="khitan_parents"></div>
+            </div>
+        </div>
+
+        <!-- Acara Section -->
+        <h2>Waktu & Lokasi</h2>
+        <div class="card">
+            <div class="form-group">
+                <label>Acara 1 (Akad / Utama)</label>
+                <input type="text" id="event_1_name" placeholder="Nama Acara (Contoh: Akad Nikah)">
+                <input type="datetime-local" id="event_1_date" style="margin-top: 6px;">
+                <input type="text" id="event_1_loc" placeholder="Lokasi Acara 1" style="margin-top: 6px;">
+            </div>
+            <div class="form-group">
+                <label>Acara 2 (Resepsi / Tambahan)</label>
+                <input type="text" id="event_2_name" placeholder="Nama Acara (Contoh: Resepsi)">
+                <input type="datetime-local" id="event_2_date" style="margin-top: 6px;">
+                <input type="text" id="event_2_loc" placeholder="Lokasi Acara 2" style="margin-top: 6px;">
+                <input type="text" id="event_2_entertainment" placeholder="Hiburan (Contoh: Electone)" style="margin-top: 6px;">
+            </div>
+            <div class="form-group">
+                <label>Lokasi & Google Maps</label>
+                <textarea id="location_address" rows="2" placeholder="Alamat Lengkap Lokasi"></textarea>
+                <input type="text" id="location_url" placeholder="URL Google Maps (Tombol Buka Map)" style="margin-top: 6px;">
+                <input type="text" id="location_embed" placeholder="URL Embed Iframe Google Maps (Opsional)" style="margin-top: 6px;">
+            </div>
+        </div>
+
+        <!-- Media Section -->
+        <h2>Media & Galeri</h2>
+        <div class="card">
+            <div class="form-group"><label>URL Foto Sampul Popup (Kosongkan untuk img/img3.jpg)</label><input type="text" id="cover_image" placeholder="img/img3.jpg atau URL foto" onchange="preview(this)"></div>
+            <div class="form-group"><label>URL Foto Background Header (Kosongkan untuk img/img7.png)</label><input type="text" id="hero_image" placeholder="img/img7.png atau URL foto" onchange="preview(this)"></div>
+            <div class="form-group"><label>URL Foto Salam Penutup (Kosongkan untuk img/img10.jpg)</label><input type="text" id="closing_image" placeholder="img/img10.jpg atau URL foto" onchange="preview(this)"></div>
+            <div class="form-group"><label>URL Musik (.mp3, kosongkan untuk audio/audio.mp3)</label><input type="text" id="music_url" placeholder="audio/audio.mp3"></div>
+            <div class="form-group">
+                <label>Galeri Foto Carousel (Masukkan URL atau path lokal)</label>
+                <input type="text" id="gallery_1" placeholder="Foto 1 (Default: img/img2.jpg)" style="margin-bottom: 6px;" onchange="preview(this)">
+                <input type="text" id="gallery_2" placeholder="Foto 2 (Default: img/img12.jpg)" style="margin-bottom: 6px;" onchange="preview(this)">
+                <input type="text" id="gallery_3" placeholder="Foto 3 (Default: img/img13.jpg)" style="margin-bottom: 6px;" onchange="preview(this)">
+                <input type="text" id="gallery_4" placeholder="Foto 4 (Default: img/img4.jpg)" onchange="preview(this)">
+            </div>
+        </div>
+
+        <!-- Gift Section -->
+        <h2>Amplop Digital</h2>
+        <div class="card">
+            <div class="form-group"><label>Nama Bank / E-Wallet (BCA, BRI, BNI, Mandiri, BSG otomatis berlogo)</label><input type="text" id="gift_bank" placeholder="Contoh: BCA / BRI / BNI / Mandiri / BSG"></div>
+            <div class="form-group"><label>Nomor Rekening</label><input type="text" id="gift_acc"></div>
+            <div class="form-group"><label>Atas Nama</label><input type="text" id="gift_name"></div>
+        </div>
+
+        <!-- Turut Mengundang -->
+        <h2>Turut Mengundang</h2>
+        <div class="card">
+            <div class="form-group">
+                <label>Daftar Keluarga / Tokoh yang Turut Mengundang (Pisahkan dengan | atau baris baru)</label>
+                <textarea id="turut_mengundang" rows="4" placeholder="Kel. Besar Mempelai Pria | Kel. Besar Mempelai Wanita"></textarea>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <h2>Tampilkan Kolom</h2>
+        <div class="card">
+            <div class="form-group">
+                <div class="row"><span>Waktu & Lokasi (Save The Date)</span><label class="switch"><input type="checkbox" id="sec_events_v" checked><span class="slider"></span></label></div>
+            </div>
+            <div class="form-group">
+                <div class="row"><span>Galeri Foto</span><label class="switch"><input type="checkbox" id="sec_gallery_v" checked><span class="slider"></span></label></div>
+            </div>
+            <div class="form-group">
+                <div class="row"><span>Amplop Digital</span><label class="switch"><input type="checkbox" id="sec_gift_v" checked><span class="slider"></span></label></div>
+            </div>
+            <div class="form-group">
+                <div class="row"><span>Wishes & RSVP</span><label class="switch"><input type="checkbox" id="sec_wishes_v" checked><span class="slider"></span></label></div>
+            </div>
+            <div class="form-group">
+                <div class="row"><span>Turut Mengundang</span><label class="switch"><input type="checkbox" id="sec_turut_v" checked><span class="slider"></span></label></div>
+            </div>
+        </div>
+
+        <button class="btn-save" id="saveBtn" onclick="saveData()">Simpan Semua Perubahan</button>
+    </div>
+
+    <script>
+        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwZsRWmX6Pd_4TJgAWtW-rAgPZdy3IIBExMG-dsNXWfnD4RpBTrNLNg6RiC5WAQ4zMy8A/exec";
+
+        window.onload = function() { loadData(); };
+
+        function preview(input) {
+            let next = input.nextElementSibling;
+            if (!next || next.tagName !== 'IMG') {
+                next = document.createElement('img');
+                next.className = 'preview-img';
+                input.parentNode.insertBefore(next, input.nextSibling);
+            }
+            if (input.value) {
+                let url = input.value;
+                if (url.includes("github.com") && url.includes("/blob/")) {
+                    url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
+                }
+                next.src = url;
+                next.style.display = 'block';
+            } else {
+                next.style.display = 'none';
+            }
+        }
+
+        function loadData() {
+            fetch(`${GAS_API_URL}?action=getSettings`)
+                .then(res => res.json())
+                .then(data => {
+                    Object.keys(data).forEach(key => {
+                        const el = document.getElementById(key);
+                        if (el) {
+                            if (el.type === 'checkbox') el.checked = data[key].visible;
+                            else el.value = data[key].value;
+                            if (el.onchange) el.onchange();
+                        }
+                    });
+                    toggleFields();
+                })
+                .catch(err => console.error("Gagal memuat pengaturan:", err));
+        }
+
+        function toggleFields() {
+            const t = document.getElementById('type').value;
+            document.getElementById('wedding-fields').style.display = t === 'wedding' ? 'block' : 'none';
+            document.getElementById('khitan-fields').style.display = t === 'khitan' ? 'block' : 'none';
+        }
+
+        function saveData() {
+            const btn = document.getElementById('saveBtn');
+            btn.innerText = "Menyimpan...";
+            btn.disabled = true;
+
+            const payload = {};
+            const elements = document.querySelectorAll('input, select, textarea');
+            elements.forEach(el => {
+                if (el.id) {
+                    payload[el.id] = { 
+                        value: el.type === 'checkbox' ? (el.id.endsWith('_v') ? '' : el.checked) : el.value,
+                        visible: el.type === 'checkbox' ? el.checked : true
+                    };
+                }
+            });
+
+            fetch(`${GAS_API_URL}?action=saveSettings`, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert("Pengaturan Berhasil Disimpan!");
+                btn.innerText = "Simpan Semua Perubahan";
+                btn.disabled = false;
+            }).catch(err => {
+                alert("Gagal menyimpan: " + err);
+                btn.innerText = "Simpan Semua Perubahan";
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
+
