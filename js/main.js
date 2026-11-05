@@ -87,8 +87,8 @@ window.currentInvitationType = "wedding";
 
 function getAudioCandidates(isWedding) {
   return isWedding
-    ? ["audio/audio.mp3", "assets/music.mp3", "audio.mp3", "music.mp3"]
-    : ["assets/music.mp3", "audio/audio.mp3", "music.mp3", "audio.mp3"];
+    ? ["audio/audio.mp3", "assets/music.mp3"]
+    : ["assets/music.mp3", "audio/audio.mp3"];
 }
 
 function updateAudioButtons(isPlaying) {
@@ -127,12 +127,10 @@ function playAudio(fallbackIndex) {
   const candidates = getAudioCandidates(isWedding);
   const currentAttrSrc = (lagu.getAttribute("src") || "").trim();
 
-  if (!currentAttrSrc || idx > 0) {
-    const chosenSrc = candidates[idx] || candidates[0];
-    if (currentAttrSrc !== chosenSrc) {
-      lagu.setAttribute("src", chosenSrc);
-      lagu.load();
-    }
+  const chosenSrc = candidates[idx] || candidates[0];
+  if (currentAttrSrc !== chosenSrc) {
+    lagu.setAttribute("src", chosenSrc);
+    lagu.load();
   }
 
   lagu.muted = false;
