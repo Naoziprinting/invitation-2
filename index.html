@@ -17,16 +17,31 @@
 </head>
 
 <body>
+  <!-- Shared SVG Wave Gradients (menghindari duplikasi kode <defs>) -->
+  <svg width="0" height="0" style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+    <defs>
+      <linearGradient id="sw-grad-0" x1="0" x2="0" y1="1" y2="0">
+        <stop class="wave-stop" stop-color="#8785a2" stop-opacity="0.84" offset="0%"></stop>
+        <stop class="wave-stop" stop-color="#8785a2" stop-opacity="1" offset="100%"></stop>
+      </linearGradient>
+      <linearGradient id="sw-grad-1" x1="0" x2="0" y1="1" y2="0">
+        <stop class="wave-stop" stop-color="#8785a2" stop-opacity="0.74" offset="0%"></stop>
+        <stop class="wave-stop" stop-color="#8785a2" stop-opacity="1" offset="100%"></stop>
+      </linearGradient>
+      <linearGradient id="sw-grad-2" x1="0" x2="0" y1="1" y2="0">
+        <stop class="wave-stop" stop-color="#8785a2" stop-opacity="0.8" offset="0%"></stop>
+        <stop class="wave-stop" stop-color="#8785a2" stop-opacity="1" offset="100%"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
+
   <!-- lagu start -->
   <audio loop preload="auto" id="lagu" src="audio/audio.mp3"></audio>
   <!-- lagu end -->
 
-  <!-- popup start -->
-  <div class="d-none">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-      id="klikmodal">Launch modal</button>
-  </div>
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <!-- popup sampul start -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="open-names" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-fullscreen">
       <div class="modal-content">
         <div class="modal-body bg-wakwak p-0">
@@ -34,16 +49,18 @@
             <div class="col-md-6 col-12" id="front-image">
               <img id="front-image-img" src="img/img3.jpg" alt="Foto Sampul" />
             </div>
-            <div class="flex col-md-6 col-12 mt-auto mb-auto px-3" id="front-text">
+            <div class="col-md-6 col-12 px-3" id="front-text">
               <p class="mb-1"><small id="open-title">The Wedding of</small></p>
-              <h1 id="open-names" class="font-dancing fs-60">Aril <br />&<br /> Cici</h1>
+              <h1 id="open-names" class="font-dancing fs-60">Aril <br />&amp;<br /> Cici</h1>
               <small class="mt-3 d-block" id="open-date">Sabtu, 8 Februari 2025</small>
               <hr class="border-secondary w-50 mx-auto my-3" />
               <p class="mb-1">Kepada Yth. Bapak/Ibu/Saudara/i</p>
               <p class="mb-2 mt-2"><span class="fw-semibold h4" id="namaTamu">Tamu Undangan</span></p>
               <p class="mb-1"><small>di Tempat</small></p>
-              <p class="mb-3"><small class="fst-italic text-muted" style="font-size: 0.75rem;">*Mohon maaf apabila ada kesalahan penulisan nama/gelar</small></p>
-              <button type="button" class="btn bg-berem btn-outline-secondary text-white rounded-4 px-4 py-2 shadow-sm"
+              <p class="mb-3"><small class="fst-italic text-muted" style="font-size: 0.75rem;">*Mohon maaf apabila ada
+                  kesalahan penulisan nama/gelar</small></p>
+              <button type="button" id="btn-open-invitation"
+                class="btn bg-berem btn-outline-secondary text-white rounded-4 px-4 py-2 shadow-sm"
                 data-bs-dismiss="modal" onclick="openInvitation()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-envelope-heart-fill mb-1 me-1" viewBox="0 0 16 16">
@@ -51,7 +68,7 @@
                     d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555l-4.2 2.568a2.785 2.785 0 0 0-.051-.105c-.666-1.3-2.363-1.917-3.699-1.25-1.336-.667-3.033-.05-3.699 1.25l-.05.105L.05 3.555ZM11.584 8.91a4.694 4.694 0 0 1-.073.139L16 11.8V4.697l-4.003 2.447c.027.562-.107 1.163-.413 1.767Zm-4.135 3.05c-1.048-.693-1.84-1.39-2.398-2.082L.19 12.856A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144L10.95 9.878c-.559.692-1.35 1.389-2.398 2.081L8 12.324l-.551-.365ZM4.416 8.91c-.306-.603-.44-1.204-.413-1.766L0 4.697v7.104l4.49-2.752a4.742 4.742 0 0 1-.074-.138Z" />
                   <path d="M8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
                 </svg>
-                Buka Undangan
+                <span id="btn-open-text">Buka Undangan</span>
               </button>
             </div>
           </div>
@@ -59,7 +76,7 @@
       </div>
     </div>
   </div>
-  <!-- popup end -->
+  <!-- popup sampul end -->
 
   <!-- header start -->
   <header class="bg-wakwak" id="cover">
@@ -69,7 +86,7 @@
         <div class="row">
           <div class="col-12 mt-5">
             <span id="hero-title">The Wedding of</span>
-            <h1 id="hero-names" class="font-dancing fs-60 mt-2">Aril & Cici</h1>
+            <h1 id="hero-names" class="font-dancing fs-60 mt-2">Aril &amp; Cici</h1>
             <p id="hero-date">Sabtu, 8 Februari 2025</p>
             <div class="simply-countdown" id="countdown-wrap"></div>
           </div>
@@ -125,7 +142,8 @@
         <!-- Wedding UI -->
         <div id="wedding-ui" class="row justify-content-center align-items-center">
           <div class="col-md-5 col-12 my-md-4 my-3" data-aos="zoom-in" data-aos-duration="1300" data-aos-delay="300">
-            <img id="groom-img" src="img/img9.jpg" class="rounded-circle shadow-lg profile-circle mb-3" alt="Mempelai Pria" />
+            <img id="groom-img" src="img/img9.jpg" class="rounded-circle shadow-lg profile-circle mb-3"
+              alt="Mempelai Pria" />
             <h1 id="groom-fullname" class="font-dancing text-dark fs-45">Muhammad Nazril Mokodompit</h1>
             <p class="text-muted mb-1" id="groom-nickname-wrap">(<span id="groom-nickname">Aril</span>)</p>
             <p class="m-0 p-0 fw-semibold" id="groom-order">Putra Pertama</p>
@@ -141,7 +159,8 @@
           </div>
 
           <div class="col-md-5 col-12 my-md-4 my-3" data-aos="zoom-in" data-aos-duration="1300" data-aos-delay="700">
-            <img id="bride-img" src="img/img8.jpg" class="rounded-circle shadow-lg profile-circle mb-3" alt="Mempelai Wanita" />
+            <img id="bride-img" src="img/img8.jpg" class="rounded-circle shadow-lg profile-circle mb-3"
+              alt="Mempelai Wanita" />
             <h1 id="bride-fullname" class="font-dancing text-dark fs-45">Cici Puspitasari Dakotalot</h1>
             <p class="text-muted mb-1" id="bride-nickname-wrap">(<span id="bride-nickname">Cici</span>)</p>
             <p class="m-0 p-0 fw-semibold" id="bride-order">Putri Pertama</p>
@@ -156,7 +175,8 @@
         <!-- Khitan UI -->
         <div id="khitan-ui" class="row justify-content-center hidden">
           <div class="col-md-6 col-12 my-3" data-aos="zoom-in" data-aos-duration="1300">
-            <img id="khitan-img" src="img/img9.jpg" class="rounded-circle shadow-lg profile-circle mb-3" alt="Foto Anak" />
+            <img id="khitan-img" src="img/img9.jpg" class="rounded-circle shadow-lg profile-circle mb-3"
+              alt="Foto Anak" />
             <h1 id="khitan-name" class="font-dancing text-dark fs-45">Nama Anak</h1>
             <p class="m-0 p-0">Putra Tercinta dari</p>
             <p class="m-0 p-0 fw-bold" id="khitan-parents">Bapak &amp; Ibu</p>
@@ -168,29 +188,15 @@
   <!-- calon / profile end -->
 
   <!-- akad / events start -->
-  <svg class="bg-wakwak sec_events_v" style="transform: rotate(0deg); transition: 0.3s; display: block;" viewBox="0 0 1440 210"
-    version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="sw-gradient-events-top-0" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.84)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient id="sw-gradient-events-top-1" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.74)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient id="sw-gradient-events-top-2" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.8)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-    </defs>
-    <path style="transform: translate(0, 0px); opacity: 1" fill="url(#sw-gradient-events-top-0)"
+  <svg class="bg-wakwak sec_events_v" style="transform: rotate(0deg); transition: 0.3s; display: block;"
+    viewBox="0 0 1440 210" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path style="transform: translate(0, 0px); opacity: 1" fill="url(#sw-grad-0)"
       d="M0,168L60,157.5C120,147,240,126,360,126C480,126,600,147,720,143.5C840,140,960,112,1080,91C1200,70,1320,56,1440,59.5C1560,63,1680,84,1800,94.5C1920,105,2040,105,2160,105C2280,105,2400,105,2520,105C2640,105,2760,105,2880,105C3000,105,3120,105,3240,108.5C3360,112,3480,119,3600,105C3720,91,3840,56,3960,38.5C4080,21,4200,21,4320,31.5C4440,42,4560,63,4680,87.5C4800,112,4920,140,5040,154C5160,168,5280,168,5400,168C5520,168,5640,168,5760,147C5880,126,6000,84,6120,84C6240,84,6360,126,6480,147C6600,168,6720,168,6840,171.5C6960,175,7080,182,7200,157.5C7320,133,7440,77,7560,49C7680,21,7800,21,7920,45.5C8040,70,8160,119,8280,129.5C8400,140,8520,112,8580,98L8640,84L8640,210L8580,210C8520,210,8400,210,8280,210C8160,210,8040,210,7920,210C7800,210,7680,210,7560,210C7440,210,7320,210,7200,210C7080,210,6960,210,6840,210C6720,210,6600,210,6480,210C6360,210,6240,210,6120,210C6000,210,5880,210,5760,210C5640,210,5520,210,5400,210C5280,210,5160,210,5040,210C4920,210,4800,210,4680,210C4560,210,4440,210,4320,210C4200,210,4080,210,3960,210C3840,210,3720,210,3600,210C3480,210,3360,210,3240,210C3120,210,3000,210,2880,210C2760,210,2640,210,2520,210C2400,210,2280,210,2160,210C2040,210,1920,210,1800,210C1680,210,1560,210,1440,210C1320,210,1200,210,1080,210C960,210,840,210,720,210C600,210,480,210,360,210C240,210,120,210,60,210L0,210Z">
     </path>
-    <path style="transform: translate(0, 50px); opacity: 0.9" fill="url(#sw-gradient-events-top-1)"
+    <path style="transform: translate(0, 50px); opacity: 0.9" fill="url(#sw-grad-1)"
       d="M0,42L60,66.5C120,91,240,140,360,136.5C480,133,600,77,720,49C840,21,960,21,1080,28C1200,35,1320,49,1440,45.5C1560,42,1680,21,1800,10.5C1920,0,2040,0,2160,14C2280,28,2400,56,2520,56C2640,56,2760,28,2880,35C3000,42,3120,84,3240,87.5C3360,91,3480,56,3600,38.5C3720,21,3840,21,3960,45.5C4080,70,4200,119,4320,129.5C4440,140,4560,112,4680,94.5C4800,77,4920,70,5040,66.5C5160,63,5280,63,5400,84C5520,105,5640,147,5760,161C5880,175,6000,161,6120,140C6240,119,6360,91,6480,73.5C6600,56,6720,49,6840,42C6960,35,7080,28,7200,38.5C7320,49,7440,77,7560,98C7680,119,7800,133,7920,126C8040,119,8160,91,8280,77C8400,63,8520,63,8580,63L8640,63L8640,210L8580,210C8520,210,8400,210,8280,210C8160,210,8040,210,7920,210C7800,210,7680,210,7560,210C7440,210,7320,210,7200,210C7080,210,6960,210,6840,210C6720,210,6600,210,6480,210C6360,210,6240,210,6120,210C6000,210,5880,210,5760,210C5640,210,5520,210,5400,210C5280,210,5160,210,5040,210C4920,210,4800,210,4680,210C4560,210,4440,210,4320,210C4200,210,4080,210,3960,210C3840,210,3720,210,3600,210C3480,210,3360,210,3240,210C3120,210,3000,210,2880,210C2760,210,2640,210,2520,210C2400,210,2280,210,2160,210C2040,210,1920,210,1800,210C1680,210,1560,210,1440,210C1320,210,1200,210,1080,210C960,210,840,210,720,210C600,210,480,210,360,210C240,210,120,210,60,210L0,210Z">
     </path>
-    <path style="transform: translate(0, 100px); opacity: 0.8" fill="url(#sw-gradient-events-top-2)"
+    <path style="transform: translate(0, 100px); opacity: 0.8" fill="url(#sw-grad-2)"
       d="M0,168L60,154C120,140,240,112,360,108.5C480,105,600,126,720,140C840,154,960,161,1080,150.5C1200,140,1320,112,1440,94.5C1560,77,1680,70,1800,84C1920,98,2040,133,2160,122.5C2280,112,2400,56,2520,49C2640,42,2760,84,2880,98C3000,112,3120,98,3240,91C3360,84,3480,84,3600,70C3720,56,3840,28,3960,24.5C4080,21,4200,42,4320,63C4440,84,4560,105,4680,101.5C4800,98,4920,70,5040,63C5160,56,5280,70,5400,66.5C5520,63,5640,42,5760,31.5C5880,21,6000,21,6120,38.5C6240,56,6360,91,6480,98C6600,105,6720,84,6840,84C6960,84,7080,105,7200,105C7320,105,7440,84,7560,70C7680,56,7800,49,7920,59.5C8040,70,8160,98,8280,108.5C8400,119,8520,112,8580,108.5L8640,105L8640,210L8580,210C8520,210,8400,210,8280,210C8160,210,8040,210,7920,210C7800,210,7680,210,7560,210C7440,210,7320,210,7200,210C7080,210,6960,210,6840,210C6720,210,6600,210,6480,210C6360,210,6240,210,6120,210C6000,210,5880,210,5760,210C5640,210,5520,210,5400,210C5280,210,5160,210,5040,210C4920,210,4800,210,4680,210C4560,210,4440,210,4320,210C4200,210,4080,210,3960,210C3840,210,3720,210,3600,210C3480,210,3360,210,3240,210C3120,210,3000,210,2880,210C2760,210,2640,210,2520,210C2400,210,2280,210,2160,210C2040,210,1920,210,1800,210C1680,210,1560,210,1440,210C1320,210,1200,210,1080,210C960,210,840,210,720,210C600,210,480,210,360,210C240,210,120,210,60,210L0,210Z">
     </path>
   </svg>
@@ -215,7 +221,8 @@
             <p id="event-2-date" class="fw-bold p-0 m-0">Sabtu, 8 Februari 2025</p>
             <p id="event-2-time" class="m-0 p-0">Pukul 11:00 WIB - Selesai</p>
             <p id="event-2-loc" class="m-0 p-0 mt-1">Rumah Mempelai Wanita Desa Bai, Kec. Nuangan Boltim</p>
-            <p id="event-2-entertainment-wrap" class="fw-bold p-0 m-0 mt-2">Hiburan : <span id="event-2-entertainment">Electone</span></p>
+            <p id="event-2-entertainment-wrap" class="fw-bold p-0 m-0 mt-2">Hiburan : <span
+                id="event-2-entertainment">Electone</span></p>
           </div>
         </div>
         <div class="col-12 py-4" data-aos="zoom-in" data-aos-duration="1300" data-aos-delay="700">
@@ -223,7 +230,7 @@
           <p class="text-white" id="disp-address">
             Rumah Mempelai Wanita Desa Bai, Kec. Nuangan Boltim
           </p>
-          <a href="https://maps.app.goo.gl/vrXDtTCL3W9aifYE9" id="map-link" target="_blank"
+          <a href="https://maps.app.goo.gl/vrXDtTCL3W9aifYE9" id="map-link" target="_blank" rel="noopener noreferrer"
             class="text-decoration-none btn btn-light btn-outline-secondary mb-4 mt-2 rounded-4 px-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
               class="bi bi-geo-alt-fill mb-1 me-1" viewBox="0 0 16 16">
@@ -243,58 +250,30 @@
     </div>
   </section>
 
-  <svg class="bg-wakwak sec_events_v" style="transform: rotate(180deg); transition: 0.3s; display: block;" viewBox="0 0 1440 180"
-    version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="sw-gradient-events-bot-0" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.84)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient id="sw-gradient-events-bot-1" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.74)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient id="sw-gradient-events-bot-2" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.8)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-    </defs>
-    <path style="transform: translate(0, 0px); opacity: 1" fill="url(#sw-gradient-events-bot-0)"
+  <svg class="bg-wakwak sec_events_v" style="transform: rotate(180deg); transition: 0.3s; display: block;"
+    viewBox="0 0 1440 180" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path style="transform: translate(0, 0px); opacity: 1" fill="url(#sw-grad-0)"
       d="M0,54L60,69C120,84,240,114,360,129C480,144,600,144,720,123C840,102,960,60,1080,54C1200,48,1320,78,1440,87C1560,96,1680,84,1800,69C1920,54,2040,36,2160,48C2280,60,2400,102,2520,108C2640,114,2760,84,2880,72C3000,60,3120,66,3240,75C3360,84,3480,96,3600,102C3720,108,3840,108,3960,90C4080,72,4200,36,4320,42C4440,48,4560,96,4680,99C4800,102,4920,60,5040,42C5160,24,5280,30,5400,30C5520,30,5640,24,5760,33C5880,42,6000,66,6120,63C6240,60,6360,30,6480,39C6600,48,6720,96,6840,99C6960,102,7080,60,7200,39C7320,18,7440,18,7560,15C7680,12,7800,6,7920,21C8040,36,8160,72,8280,78C8400,84,8520,60,8580,48L8640,36L8640,180L8580,180C8520,180,8400,180,8280,180C8160,180,8040,180,7920,180C7800,180,7680,180,7560,180C7440,180,7320,180,7200,180C7080,180,6960,180,6840,180C6720,180,6600,180,6480,180C6360,180,6240,180,6120,180C6000,180,5880,180,5760,180C5640,180,5520,180,5400,180C5280,180,5160,180,5040,180C4920,180,4800,180,4680,180C4560,180,4440,180,4320,180C4200,180,4080,180,3960,180C3840,180,3720,180,3600,180C3480,180,3360,180,3240,180C3120,180,3000,180,2880,180C2760,180,2640,180,2520,180C2400,180,2280,180,2160,180C2040,180,1920,180,1800,180C1680,180,1560,180,1440,180C1320,180,1200,180,1080,180C960,180,840,180,720,180C600,180,480,180,360,180C240,180,120,180,60,180L0,180Z">
     </path>
-    <path style="transform: translate(0, 50px); opacity: 0.9" fill="url(#sw-gradient-events-bot-1)"
+    <path style="transform: translate(0, 50px); opacity: 0.9" fill="url(#sw-grad-1)"
       d="M0,108L60,93C120,78,240,48,360,57C480,66,600,114,720,132C840,150,960,138,1080,123C1200,108,1320,90,1440,87C1560,84,1680,96,1800,105C1920,114,2040,120,2160,111C2280,102,2400,78,2520,78C2640,78,2760,102,2880,117C3000,132,3120,138,3240,129C3360,120,3480,96,3600,87C3720,78,3840,84,3960,78C4080,72,4200,54,4320,66C4440,78,4560,120,4680,117C4800,114,4920,66,5040,60C5160,54,5280,90,5400,105C5520,120,5640,114,5760,96C5880,78,6000,48,6120,57C6240,66,6360,114,6480,138C6600,162,6720,162,6840,156C6960,150,7080,138,7200,117C7320,96,7440,66,7560,60C7680,54,7800,72,7920,90C8040,108,8160,126,8280,132C8400,138,8520,132,8580,129L8640,126L8640,180L8580,180C8520,180,8400,180,8280,180C8160,180,8040,180,7920,180C7800,180,7680,180,7560,180C7440,180,7320,180,7200,180C7080,180,6960,180,6840,180C6720,180,6600,180,6480,180C6360,180,6240,180,6120,180C6000,180,5880,180,5760,180C5640,180,5520,180,5400,180C5280,180,5160,180,5040,180C4920,180,4800,180,4680,180C4560,180,4440,180,4320,180C4200,180,4080,180,3960,180C3840,180,3720,180,3600,180C3480,180,3360,180,3240,180C3120,180,3000,180,2880,180C2760,180,2640,180,2520,180C2400,180,2280,180,2160,180C2040,180,1920,180,1800,180C1680,180,1560,180,1440,180C1320,180,1200,180,1080,180C960,180,840,180,720,180C600,180,480,180,360,180C240,180,120,180,60,180L0,180Z">
     </path>
-    <path style="transform: translate(0, 100px); opacity: 0.8" fill="url(#sw-gradient-events-bot-2)"
+    <path style="transform: translate(0, 100px); opacity: 0.8" fill="url(#sw-grad-2)"
       d="M0,162L60,135C120,108,240,54,360,30C480,6,600,12,720,24C840,36,960,54,1080,72C1200,90,1320,108,1440,120C1560,132,1680,138,1800,144C1920,150,2040,156,2160,135C2280,114,2400,66,2520,48C2640,30,2760,42,2880,54C3000,66,3120,78,3240,78C3360,78,3480,66,3600,75C3720,84,3840,114,3960,123C4080,132,4200,120,4320,96C4440,72,4560,36,4680,39C4800,42,4920,84,5040,96C5160,108,5280,90,5400,96C5520,102,5640,132,5760,129C5880,126,6000,90,6120,81C6240,72,6360,90,6480,99C6600,108,6720,108,6840,90C6960,72,7080,36,7200,27C7320,18,7440,36,7560,60C7680,84,7800,114,7920,114C8040,114,8160,84,8280,66C8400,48,8520,42,8580,39L8640,36L8640,180L8580,180C8520,180,8400,180,8280,180C8160,180,8040,180,7920,180C7800,180,7680,180,7560,180C7440,180,7320,180,7200,180C7080,180,6960,180,6840,180C6720,180,6600,180,6480,180C6360,180,6240,180,6120,180C6000,180,5880,180,5760,180C5640,180,5520,180,5400,180C5280,180,5160,180,5040,180C4920,180,4800,180,4680,180C4560,180,4440,180,4320,180C4200,180,4080,180,3960,180C3840,180,3720,180,3600,180C3480,180,3360,180,3240,180C3120,180,3000,180,2880,180C2760,180,2640,180,2520,180C2400,180,2280,180,2160,180C2040,180,1920,180,1800,180C1680,180,1560,180,1440,180C1320,180,1200,180,1080,180C960,180,840,180,720,180C600,180,480,180,360,180C240,180,120,180,60,180L0,180Z">
     </path>
   </svg>
   <!-- akad / events end -->
 
   <!-- galeri start -->
-  <svg class="bg-wakwak sec_gallery_v" style="transform: rotate(0deg); transition: 0.3s; display: block;" viewBox="0 0 1440 160"
-    version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="sw-gradient-gal-top-0" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.84)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient id="sw-gradient-gal-top-1" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.74)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient id="sw-gradient-gal-top-2" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.8)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-    </defs>
-    <path style="transform: translate(0, 0px); opacity: 1" fill="url(#sw-gradient-gal-top-0)"
+  <svg class="bg-wakwak sec_gallery_v" style="transform: rotate(0deg); transition: 0.3s; display: block;"
+    viewBox="0 0 1440 160" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path style="transform: translate(0, 0px); opacity: 1" fill="url(#sw-grad-0)"
       d="M0,96L60,90.7C120,85,240,75,360,77.3C480,80,600,96,720,104C840,112,960,112,1080,104C1200,96,1320,80,1440,77.3C1560,75,1680,85,1800,77.3C1920,69,2040,43,2160,32C2280,21,2400,27,2520,37.3C2640,48,2760,64,2880,64C3000,64,3120,48,3240,58.7C3360,69,3480,107,3600,114.7C3720,123,3840,101,3960,88C4080,75,4200,69,4320,69.3C4440,69,4560,75,4680,72C4800,69,4920,59,5040,50.7C5160,43,5280,37,5400,40C5520,43,5640,53,5760,50.7C5880,48,6000,32,6120,37.3C6240,43,6360,69,6480,77.3C6600,85,6720,75,6840,80C6960,85,7080,107,7200,117.3C7320,128,7440,128,7560,114.7C7680,101,7800,75,7920,66.7C8040,59,8160,69,8280,80C8400,91,8520,101,8580,106.7L8640,112L8640,160L8580,160C8520,160,8400,160,8280,160C8160,160,8040,160,7920,160C7800,160,7680,160,7560,160C7440,160,7320,160,7200,160C7080,160,6960,160,6840,160C6720,160,6600,160,6480,160C6360,160,6240,160,6120,160C6000,160,5880,160,5760,160C5640,160,5520,160,5400,160C5280,160,5160,160,5040,160C4920,160,4800,160,4680,160C4560,160,4440,160,4320,160C4200,160,4080,160,3960,160C3840,160,3720,160,3600,160C3480,160,3360,160,3240,160C3120,160,3000,160,2880,160C2760,160,2640,160,2520,160C2400,160,2280,160,2160,160C2040,160,1920,160,1800,160C1680,160,1560,160,1440,160C1320,160,1200,160,1080,160C960,160,840,160,720,160C600,160,480,160,360,160C240,160,120,160,60,160L0,160Z">
     </path>
-    <path style="transform: translate(0, 50px); opacity: 0.9" fill="url(#sw-gradient-gal-top-1)"
+    <path style="transform: translate(0, 50px); opacity: 0.9" fill="url(#sw-grad-1)"
       d="M0,16L60,24C120,32,240,48,360,45.3C480,43,600,21,720,26.7C840,32,960,64,1080,77.3C1200,91,1320,85,1440,88C1560,91,1680,101,1800,96C1920,91,2040,69,2160,69.3C2280,69,2400,91,2520,82.7C2640,75,2760,37,2880,42.7C3000,48,3120,96,3240,104C3360,112,3480,80,3600,80C3720,80,3840,112,3960,106.7C4080,101,4200,59,4320,48C4440,37,4560,59,4680,72C4800,85,4920,91,5040,93.3C5160,96,5280,96,5400,93.3C5520,91,5640,85,5760,82.7C5880,80,6000,80,6120,90.7C6240,101,6360,123,6480,130.7C6600,139,6720,133,6840,122.7C6960,112,7080,96,7200,85.3C7320,75,7440,69,7560,58.7C7680,48,7800,32,7920,21.3C8040,11,8160,5,8280,10.7C8400,16,8520,32,8580,40L8640,48L8640,160L8580,160C8520,160,8400,160,8280,160C8160,160,8040,160,7920,160C7800,160,7680,160,7560,160C7440,160,7320,160,7200,160C7080,160,6960,160,6840,160C6720,160,6600,160,6480,160C6360,160,6240,160,6120,160C6000,160,5880,160,5760,160C5640,160,5520,160,5400,160C5280,160,5160,160,5040,160C4920,160,4800,160,4680,160C4560,160,4440,160,4320,160C4200,160,4080,160,3960,160C3840,160,3720,160,3600,160C3480,160,3360,160,3240,160C3120,160,3000,160,2880,160C2760,160,2640,160,2520,160C2400,160,2280,160,2160,160C2040,160,1920,160,1800,160C1680,160,1560,160,1440,160C1320,160,1200,160,1080,160C960,160,840,160,720,160C600,160,480,160,360,160C240,160,120,160,60,160L0,160Z">
     </path>
-    <path style="transform: translate(0, 100px); opacity: 0.8" fill="url(#sw-gradient-gal-top-2)"
+    <path style="transform: translate(0, 100px); opacity: 0.8" fill="url(#sw-grad-2)"
       d="M0,48L60,61.3C120,75,240,101,360,112C480,123,600,117,720,109.3C840,101,960,91,1080,88C1200,85,1320,91,1440,101.3C1560,112,1680,128,1800,128C1920,128,2040,112,2160,93.3C2280,75,2400,53,2520,42.7C2640,32,2760,32,2880,40C3000,48,3120,64,3240,82.7C3360,101,3480,123,3600,133.3C3720,144,3840,144,3960,141.3C4080,139,4200,133,4320,120C4440,107,4560,85,4680,88C4800,91,4920,117,5040,120C5160,123,5280,101,5400,88C5520,75,5640,69,5760,64C5880,59,6000,53,6120,45.3C6240,37,6360,27,6480,42.7C6600,59,6720,101,6840,106.7C6960,112,7080,80,7200,58.7C7320,37,7440,27,7560,24C7680,21,7800,27,7920,40C8040,53,8160,75,8280,69.3C8400,64,8520,32,8580,16L8640,0L8640,160L8580,160C8520,160,8400,160,8280,160C8160,160,8040,160,7920,160C7800,160,7680,160,7560,160C7440,160,7320,160,7200,160C7080,160,6960,160,6840,160C6720,160,6600,160,6480,160C6360,160,6240,160,6120,160C6000,160,5880,160,5760,160C5640,160,5520,160,5400,160C5280,160,5160,160,5040,160C4920,160,4800,160,4680,160C4560,160,4440,160,4320,160C4200,160,4080,160,3960,160C3840,160,3720,160,3600,160C3480,160,3360,160,3240,160C3120,160,3000,160,2880,160C2760,160,2640,160,2520,160C2400,160,2280,160,2160,160C2040,160,1920,160,1800,160C1680,160,1560,160,1440,160C1320,160,1200,160,1080,160C960,160,840,160,720,160C600,160,480,160,360,160C240,160,120,160,60,160L0,160Z">
     </path>
   </svg>
@@ -307,39 +286,29 @@
         </div>
         <div class="col-12" data-aos="zoom-in" data-aos-duration="1300" data-aos-delay="400">
           <div class="owl-carousel owl-theme" id="gallery-container">
-            <div class="item"><a href="img/img2.jpg" data-lightbox="gallery"><img src="img/img2.jpg" alt="Gallery 1" /></a></div>
-            <div class="item"><a href="img/img12.jpg" data-lightbox="gallery"><img src="img/img12.jpg" alt="Gallery 2" /></a></div>
-            <div class="item"><a href="img/img13.jpg" data-lightbox="gallery"><img src="img/img13.jpg" alt="Gallery 3" /></a></div>
-            <div class="item"><a href="img/img4.jpg" data-lightbox="gallery"><img src="img/img4.jpg" alt="Gallery 4" /></a></div>
+            <div class="item"><a href="img/img2.jpg" data-lightbox="gallery"><img src="img/img2.jpg"
+                  alt="Gallery 1" /></a></div>
+            <div class="item"><a href="img/img12.jpg" data-lightbox="gallery"><img src="img/img12.jpg"
+                  alt="Gallery 2" /></a></div>
+            <div class="item"><a href="img/img13.jpg" data-lightbox="gallery"><img src="img/img13.jpg"
+                  alt="Gallery 3" /></a></div>
+            <div class="item"><a href="img/img4.jpg" data-lightbox="gallery"><img src="img/img4.jpg"
+                  alt="Gallery 4" /></a></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <svg class="bg-wakwak sec_gallery_v" style="transform: rotate(180deg); transition: 0.3s; display: block;" viewBox="0 0 1440 160"
-    version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="sw-gradient-gal-bot-0" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.84)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient id="sw-gradient-gal-bot-1" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.74)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-      <linearGradient id="sw-gradient-gal-bot-2" x1="0" x2="0" y1="1" y2="0">
-        <stop stop-color="rgba(135, 133, 162, 0.8)" offset="0%"></stop>
-        <stop stop-color="rgba(135, 133, 162, 1)" offset="100%"></stop>
-      </linearGradient>
-    </defs>
-    <path style="transform: translate(0, 0px); opacity: 1" fill="url(#sw-gradient-gal-bot-0)"
+  <svg class="bg-wakwak sec_gallery_v" style="transform: rotate(180deg); transition: 0.3s; display: block;"
+    viewBox="0 0 1440 160" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <path style="transform: translate(0, 0px); opacity: 1" fill="url(#sw-grad-0)"
       d="M0,112L60,109.3C120,107,240,101,360,101.3C480,101,600,107,720,101.3C840,96,960,80,1080,66.7C1200,53,1320,43,1440,45.3C1560,48,1680,64,1800,72C1920,80,2040,80,2160,82.7C2280,85,2400,91,2520,90.7C2640,91,2760,85,2880,80C3000,75,3120,69,3240,66.7C3360,64,3480,64,3600,69.3C3720,75,3840,85,3960,93.3C4080,101,4200,107,4320,114.7C4440,123,4560,133,4680,122.7C4800,112,4920,80,5040,72C5160,64,5280,80,5400,77.3C5520,75,5640,53,5760,61.3C5880,69,6000,107,6120,104C6240,101,6360,59,6480,34.7C6600,11,6720,5,6840,24C6960,43,7080,85,7200,109.3C7320,133,7440,139,7560,128C7680,117,7800,91,7920,66.7C8040,43,8160,21,8280,21.3C8400,21,8520,43,8580,53.3L8640,64L8640,160L8580,160C8520,160,8400,160,8280,160C8160,160,8040,160,7920,160C7800,160,7680,160,7560,160C7440,160,7320,160,7200,160C7080,160,6960,160,6840,160C6720,160,6600,160,6480,160C6360,160,6240,160,6120,160C6000,160,5880,160,5760,160C5640,160,5520,160,5400,160C5280,160,5160,160,5040,160C4920,160,4800,160,4680,160C4560,160,4440,160,4320,160C4200,160,4080,160,3960,160C3840,160,3720,160,3600,160C3480,160,3360,160,3240,160C3120,160,3000,160,2880,160C2760,160,2640,160,2520,160C2400,160,2280,160,2160,160C2040,160,1920,160,1800,160C1680,160,1560,160,1440,160C1320,160,1200,160,1080,160C960,160,840,160,720,160C600,160,480,160,360,160C240,160,120,160,60,160L0,160Z">
     </path>
-    <path style="transform: translate(0, 50px); opacity: 0.9" fill="url(#sw-gradient-gal-bot-1)"
+    <path style="transform: translate(0, 50px); opacity: 0.9" fill="url(#sw-grad-1)"
       d="M0,16L60,21.3C120,27,240,37,360,58.7C480,80,600,112,720,109.3C840,107,960,69,1080,56C1200,43,1320,53,1440,72C1560,91,1680,117,1800,122.7C1920,128,2040,112,2160,112C2280,112,2400,128,2520,120C2640,112,2760,80,2880,61.3C3000,43,3120,37,3240,50.7C3360,64,3480,96,3600,104C3720,112,3840,96,3960,88C4080,80,4200,80,4320,88C4440,96,4560,112,4680,109.3C4800,107,4920,85,5040,88C5160,91,5280,117,5400,117.3C5520,117,5640,91,5760,66.7C5880,43,6000,21,6120,32C6240,43,6360,85,6480,90.7C6600,96,6720,64,6840,56C6960,48,7080,64,7200,61.3C7320,59,7440,37,7560,32C7680,27,7800,37,7920,48C8040,59,8160,69,8280,69.3C8400,69,8520,59,8580,53.3L8640,48L8640,160L8580,160C8520,160,8400,160,8280,160C8160,160,8040,160,7920,160C7800,160,7680,160,7560,160C7440,160,7320,160,7200,160C7080,160,6960,160,6840,160C6720,160,6600,160,6480,160C6360,160,6240,160,6120,160C6000,160,5880,160,5760,160C5640,160,5520,160,5400,160C5280,160,5160,160,5040,160C4920,160,4800,160,4680,160C4560,160,4440,160,4320,160C4200,160,4080,160,3960,160C3840,160,3720,160,3600,160C3480,160,3360,160,3240,160C3120,160,3000,160,2880,160C2760,160,2640,160,2520,160C2400,160,2280,160,2160,160C2040,160,1920,160,1800,160C1680,160,1560,160,1440,160C1320,160,1200,160,1080,160C960,160,840,160,720,160C600,160,480,160,360,160C240,160,120,160,60,160L0,160Z">
     </path>
-    <path style="transform: translate(0, 100px); opacity: 0.8" fill="url(#sw-gradient-gal-bot-2)"
+    <path style="transform: translate(0, 100px); opacity: 0.8" fill="url(#sw-grad-2)"
       d="M0,16L60,24C120,32,240,48,360,64C480,80,600,96,720,85.3C840,75,960,37,1080,37.3C1200,37,1320,75,1440,82.7C1560,91,1680,69,1800,61.3C1920,53,2040,59,2160,72C2280,85,2400,107,2520,112C2640,117,2760,107,2880,93.3C3000,80,3120,64,3240,58.7C3360,53,3480,59,3600,72C3720,85,3840,107,3960,112C4080,117,4200,107,4320,109.3C4440,112,4560,128,4680,130.7C4800,133,4920,123,5040,106.7C5160,91,5280,69,5400,50.7C5520,32,5640,16,5760,21.3C5880,27,6000,53,6120,77.3C6240,101,6360,123,6480,122.7C6600,123,6720,101,6840,80C6960,59,7080,37,7200,32C7320,27,7440,37,7560,34.7C7680,32,7800,16,7920,13.3C8040,11,8160,21,8280,24C8400,27,8520,21,8580,18.7L8640,16L8640,160L8580,160C8520,160,8400,160,8280,160C8160,160,8040,160,7920,160C7800,160,7680,160,7560,160C7440,160,7320,160,7200,160C7080,160,6960,160,6840,160C6720,160,6600,160,6480,160C6360,160,6240,160,6120,160C6000,160,5880,160,5760,160C5640,160,5520,160,5400,160C5280,160,5160,160,5040,160C4920,160,4800,160,4680,160C4560,160,4440,160,4320,160C4200,160,4080,160,3960,160C3840,160,3720,160,3600,160C3480,160,3360,160,3240,160C3120,160,3000,160,2880,160C2760,160,2640,160,2520,160C2400,160,2280,160,2160,160C2040,160,1920,160,1800,160C1680,160,1560,160,1440,160C1320,160,1200,160,1080,160C960,160,840,160,720,160C600,160,480,160,360,160C240,160,120,160,60,160L0,160Z">
     </path>
   </svg>
@@ -361,16 +330,18 @@
         </div>
         <div class="col-md-6 col-12 mb-3 blur" data-aos="zoom-in" data-aos-duration="1300" data-aos-delay="500">
           <div class="card bg-fee rounded-4 shadow p-4">
-            <img id="gift-bank-logo" src="img/Bank_BSG.png" height="50px" alt="Logo Bank" class="mx-auto mb-2" style="object-fit: contain;" />
+            <img id="gift-bank-logo" src="img/Bank_BSG.png" height="50px" alt="Logo Bank" class="mx-auto mb-2"
+              style="object-fit: contain;" />
             <h5 id="gift-bank" class="fw-bold text-berem mb-0">BSG</h5>
             <hr />
             <p class="mb-2">
-              <input type="text" value="02702090005226" class="bg-fee norek fs-5" id="rek1" readonly />
-              <span id="gift-acc" class="d-none">02702090005226</span>
+              <input type="text" value="02702090005226" class="bg-fee norek fs-5" id="rek1" readonly
+                onclick="copyAcc()" />
             </p>
             <p class="mb-3">a/n <span id="gift-name" class="fw-semibold">Rina Buntuan</span></p>
             <div>
-              <button type="button" class="btn bg-berem text-white btn-outline-secondary rounded-pill" id="salin1" onclick="copyAcc()">
+              <button type="button" class="btn bg-berem text-white btn-outline-secondary rounded-pill" id="salin1"
+                onclick="copyAcc()">
                 <div class="mx-4">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-clipboard2-check-fill mb-1 me-1" viewBox="0 0 16 16">
@@ -403,16 +374,18 @@
           <div class="card bg-fee rounded-4 shadow-sm p-4 text-start">
             <form id="my-form" onsubmit="event.preventDefault(); submitWish();">
               <div class="mb-3">
-                <label class="form-label fw-semibold small text-muted">Nama Anda</label>
-                <input type="text" id="wish-name-input" name="nama" placeholder="Masukkan nama Anda" class="form-control" required />
+                <label for="wish-name-input" class="form-label fw-semibold small text-muted">Nama Anda</label>
+                <input type="text" id="wish-name-input" name="nama" placeholder="Masukkan nama Anda"
+                  class="form-control" required />
               </div>
               <div class="mb-3">
-                <label class="form-label fw-semibold small text-muted">Ucapan &amp; Doa</label>
-                <textarea id="wish-msg-input" name="ucapan" placeholder="Berikan ucapan atau doa terbaik Anda..." rows="3" class="form-control" required></textarea>
+                <label for="wish-msg-input" class="form-label fw-semibold small text-muted">Ucapan &amp; Doa</label>
+                <textarea id="wish-msg-input" name="ucapan" placeholder="Berikan ucapan atau doa terbaik Anda..."
+                  rows="3" class="form-control" required></textarea>
               </div>
               <div class="row">
                 <div class="col-md-8 mb-3">
-                  <label class="form-label fw-semibold small text-muted">Konfirmasi Kehadiran</label>
+                  <label for="wish-attend" class="form-label fw-semibold small text-muted">Konfirmasi Kehadiran</label>
                   <select id="wish-attend" name="konfirmasi" class="form-select" required>
                     <option value="Hadir">Hadir</option>
                     <option value="Tidak Hadir">Tidak Hadir</option>
@@ -425,7 +398,8 @@
                 </div>
               </div>
               <div class="mt-2">
-                <button type="submit" id="btn-submit-wish" class="btn bg-berem btn-outline-secondary text-white px-4 rounded-pill">
+                <button type="submit" id="btn-submit-wish"
+                  class="btn bg-berem btn-outline-secondary text-white px-4 rounded-pill">
                   Kirim RSVP &amp; Ucapan
                 </button>
               </div>
@@ -448,7 +422,8 @@
       <div class="row text-center justify-content-center">
         <div class="col-lg-9 col-md-11 col-12">
           <div data-aos="zoom-in" data-aos-duration="1300" data-aos-delay="300">
-            <img id="closing-img" src="img/img10.jpg" class="rounded-circle shadow-lg profile-circle mb-3" alt="Foto Penutup" />
+            <img id="closing-img" src="img/img10.jpg" class="rounded-circle shadow-lg profile-circle mb-3"
+              alt="Foto Penutup" />
             <p class="m-0 p-0 mb-3">Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila Bapak/Ibu/Saudara/i
               berkenan hadir dan memberikan doa restu. Atas kehadiran dan doa restunya, kami mengucapkan terima kasih.
             </p>
@@ -486,9 +461,10 @@
   </section>
   <!-- turut mengundang end -->
 
-  <svg class="bg-wakwak" style="display: block;" viewBox="0 0 1440 240" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <svg class="bg-wakwak" style="display: block;" viewBox="0 0 1440 240" version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
     <path fill="#FFC7C7"
-      d="M0,144L60,128C120,112,240,80,360,88C480,96,600,144,720,140C840,136,960,80,1080,72C1200,64,1320,104,1440,120C1560,136,1680,128,1800,108C1920,88,2040,56,2160,64C2280,72,2400,120,2520,148C2640,176,2760,184,2880,184C3000,184,3120,176,3240,156C3360,136,3480,104,3600,96C3720,88,3840,104,3960,124C4080,144,4200,168,4320,148C4440,128,4560,64,4680,56C4800,48,4920,96,5040,108C5160,120,5280,96,5400,72C5520,48,5640,24,5760,40C5880,56,6000,112,6120,148C6240,184,6360,200,6480,172C6600,144,6720,72,6840,44C6960,16,7080,32,7200,48C7320,64,7440,80,7560,80C7680,80,7800,64,7920,76C8040,88,8160,128,8280,124C8400,120,8520,72,8580,48L8640,24L8640,240L8580,240C8520,240,8400,240,8280,240C8160,240,8040,240,7920,240C7800,240,7680,240,7560,240C7440,240,7320,240,7200,240C7080,240,6960,240,6840,240C6720,240,6600,240,6480,240C6360,240,6240,240,6120,240C6000,240,5880,240,5760,240C5640,240,5520,240,5400,240C5280,240,5160,240,5040,240C4920,240,4800,240,4680,240C4560,240,4440,240,4320,240C4200,240,4080,240,3960,240C3840,240,3720,240,3600,240C3480,240,3360,240,3240,240C3120,240,3000,240,2880,240C2760,240,2640,240,2520,240C2400,240,2280,240,2160,240C2040,240,1920,240,1800,240C1680,240,1560,240,1440,240C1320,240,1200,240,1080,240C960,240,840,240,720,240C600,240,480,240,360,240C240,240,120,240,60,240L0,240Z">
+      d="M0,144L60,128C120,112,240,80,360,88C480,96,600,144,720,140C840,136,960,80,1080,72C1200,64,1320,104,1440,120C1560,136,1680,128,1800,108C1920,88,2040,56,2160,64C2280,72,2400,120,2520,148C2640,176,2760,184,2880,184C3000,184,3120,176,3240,156C3360,136,3480,104,3600,96C3720,88,3840,104,3960,124C4080,144,4200,168,4320,148C4440,128,4560,64,4680,56C4800,48,4920,96,5040,108C5160,120,5280,96,5400,72C5520,48,5640,24,5760,40C5880,56,6000,112,6120,148C6240,184,6360,200,6480,172C6600,144,6720,72,6840,44C6960,16,7080,32,7200,48C7320,64,7440,80,7560,80C7680,80,7800,64,7920,76C8040,88,8160,128,8280,124C8400,120,8520,72,8580,48L8640,24L8640,240L8580,240C8520,240,8400,240,8280,240C8160,240,8040,240,7920,240C7800,240,7680,240,7560,240C7440,240,7320,240,7200,240C7080,240,6960,240,6840,240C6720,240,6600,240,6480,240C6360,240,6240,240,6120,240C6000,240,5880,240,5760,240C5640,240,5520,240,5400,240C5280,240,5160,240,5040,240C4920,240,4800,240,4680,240C4560,240,4440,240,4320,240C4200,240,4080,240,3960,240C3840,240,3720,240,3600,240C3480,240,3360,240,3240,240C3120,240,3000,240,2880,240C2760,240,2640,240,2520,240C2400,240,2280,240,2160,240C2040,240,1920,240,1800,240C1680,240,1560,240,1440,240C1320,240,1200,160,1080,240C960,240,840,240,720,240C600,240,480,240,360,240C240,240,120,240,60,240L0,240Z">
     </path>
   </svg>
 
@@ -498,7 +474,8 @@
       <div class="row text-center">
         <div class="col-12">
           <small class="p-0 m-0">
-            Produced by <a target="_blank" href="https://wa.me/6288216215391" class="text-dark fw-semibold">Naozi Printing</a> | 2026
+            Produced by <a target="_blank" rel="noopener noreferrer" href="https://wa.me/6288216215391"
+              class="text-dark fw-semibold">Naozi Printing</a> | 2026
           </small>
         </div>
       </div>
@@ -509,33 +486,66 @@
   <!-- Bottom Nav (Quick Section Jump) -->
   <div class="bottom-nav">
     <a href="#cover" title="Beranda" class="active">
-      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 32L32 240h53.33v240h128V330.67h85.34V480h128V240H480L256 32z"></path></svg>
+      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em"
+        xmlns="http://www.w3.org/2000/svg">
+        <path d="M256 32L32 240h53.33v240h128V330.67h85.34V480h128V240H480L256 32z"></path>
+      </svg>
     </a>
     <a href="#profile" title="Profil">
-      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 256c53.02 0 96-42.98 96-96s-42.98-96-96-96-96 42.98-96 96 42.98 96 96 96zm135.53 42.67C351.48 274.67 298.53 256 256 256s-95.48 18.67-135.53 42.67C82.88 321.28 64 366.51 64 416v32h384v-32c0-49.49-18.88-94.72-56.47-117.33z"></path></svg>
+      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M256 256c53.02 0 96-42.98 96-96s-42.98-96-96-96-96 42.98-96 96 42.98 96 96 96zm135.53 42.67C351.48 274.67 298.53 256 256 256s-95.48 18.67-135.53 42.67C82.88 321.28 64 366.51 64 416v32h384v-32c0-49.49-18.88-94.72-56.47-117.33z">
+        </path>
+      </svg>
     </a>
     <a href="#events" title="Acara" class="sec_events_v">
-      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M384 48h-32V16h-64v32H224V16h-64v32H128C92.65 48 64 76.65 64 112v336c0 35.35 28.65 64 64 64h256c35.35 0 64-28.65 64-64V112c0-35.35-28.65-64-64-64zm-16 352H144V208h224v192z"></path></svg>
+      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M384 48h-32V16h-64v32H224V16h-64v32H128C92.65 48 64 76.65 64 112v336c0 35.35 28.65 64 64 64h256c35.35 0 64-28.65 64-64V112c0-35.35-28.65-64-64-64zm-16 352H144V208h224v192z">
+        </path>
+      </svg>
     </a>
     <a href="#gallery" title="Galeri" class="sec_gallery_v">
-      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><rect width="384" height="256" x="64" y="128" fill="none" stroke-linejoin="round" stroke-width="32" rx="48"></rect><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M64 288l102.08-102.08a48 48 0 0167.84 0l118.08 118.08"></path><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M320 288l15.92-15.92a48 48 0 0167.84 0l44.24 44.24"></path><circle cx="336" cy="208" r="32" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></circle></svg>
+      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em"
+        xmlns="http://www.w3.org/2000/svg">
+        <rect width="384" height="256" x="64" y="128" fill="none" stroke-linejoin="round" stroke-width="32" rx="48">
+        </rect>
+        <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"
+          d="M64 288l102.08-102.08a48 48 0 0167.84 0l118.08 118.08"></path>
+        <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"
+          d="M320 288l15.92-15.92a48 48 0 0167.84 0l44.24 44.24"></path>
+        <circle cx="336" cy="208" r="32" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32">
+        </circle>
+      </svg>
     </a>
     <a href="#rsvp" title="Ucapan" class="sec_wishes_v">
-      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke-linejoin="round" stroke-width="32" d="M408 64H104a56.16 56.16 0 00-56 56v192a56.16 56.16 0 0056 56h40v80l93.72-78.14a8 8 0 015.13-1.86H408a56.16 56.16 0 0056-56V120a56.16 56.16 0 00-56-56z"></path><circle cx="160" cy="216" r="32"></circle><circle cx="256" cy="216" r="32"></circle><circle cx="352" cy="216" r="32"></circle></svg>
+      <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em"
+        xmlns="http://www.w3.org/2000/svg">
+        <path fill="none" stroke-linejoin="round" stroke-width="32"
+          d="M408 64H104a56.16 56.16 0 00-56 56v192a56.16 56.16 0 0056 56h40v80l93.72-78.14a8 8 0 015.13-1.86H408a56.16 56.16 0 0056-56V120a56.16 56.16 0 00-56-56z">
+        </path>
+        <circle cx="160" cy="216" r="32"></circle>
+        <circle cx="256" cy="216" r="32"></circle>
+        <circle cx="352" cy="216" r="32"></circle>
+      </svg>
     </a>
   </div>
 
   <!-- button audio -->
   <div class="audio-floating">
     <div class="btn-group shadow rounded-pill overflow-hidden">
-      <button type="button" class="btn btn-sm bg-berem btn-outline-secondary" onclick="stopAudio()" title="Stop Musik">
+      <button type="button" id="btn-stop-audio" class="btn btn-sm bg-berem btn-outline-secondary" onclick="stopAudio()"
+        title="Stop Musik">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           class="bi bi-stop-fill text-white" viewBox="0 0 16 16">
           <path
             d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z" />
         </svg>
       </button>
-      <button type="button" class="btn btn-sm bg-berem btn-outline-secondary" onclick="playAudio()" title="Putar Musik">
+      <button type="button" id="btn-play-audio" class="btn btn-sm bg-berem btn-outline-secondary" onclick="playAudio()"
+        title="Putar Musik">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
           class="bi bi-play-fill text-light" viewBox="0 0 16 16">
           <path
@@ -557,6 +567,7 @@
   <script>
     const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwZsRWmX6Pd_4TJgAWtW-rAgPZdy3IIBExMG-dsNXWfnD4RpBTrNLNg6RiC5WAQ4zMy8A/exec";
     let settings = {};
+    let isInvitationOpened = false;
 
     // Ambil nama tamu dari URL (?to= atau ?nama=)
     const urlParams = new URLSearchParams(window.location.search);
@@ -567,7 +578,13 @@
       wishNameInput.value = guestName !== 'Tamu Undangan' ? guestName : '';
     }
 
-    // Inisialisasi Countdown Default sebelum API selesai dimuat
+    // Escape HTML untuk mencegah tag seperti <3 merusak tampilan ucapan
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str || '';
+      return div.innerHTML;
+    }
+
     function updateCountdown(dateStr) {
       const target = dateStr ? new Date(dateStr) : new Date(2026, 4, 20, 11, 0);
       const validDate = isNaN(target.getTime()) ? new Date(2026, 4, 20, 11, 0) : target;
@@ -589,21 +606,22 @@
       });
     }
 
-    let isInvitationOpened = false;
-
     function openInvitation() {
       isInvitationOpened = true;
       playAudio();
-      AOS.refresh();
+      if (typeof AOS !== "undefined") {
+        setTimeout(() => AOS.refresh(), 300);
+      }
     }
 
     // Helper konversi URL GitHub Blob ke Raw
     function toRaw(url) {
       if (!url) return "";
-      if (url.includes("github.com") && url.includes("/blob/")) {
-        return url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
+      const clean = url.trim();
+      if (clean.includes("github.com") && clean.includes("/blob/")) {
+        return clean.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
       }
-      return url;
+      return clean;
     }
 
     // Helper pencocokan logo bank dari folder img/
@@ -618,13 +636,35 @@
       return "";
     }
 
-    window.addEventListener("load", function () {
-      AOS.init({ once: true });
+    // Fallback otomatis apabila URL audio kustom gagal dimuat
+    const audioElement = document.getElementById('lagu');
+    if (audioElement) {
+      audioElement.addEventListener('error', function () {
+        const isWedding = !settings.type || settings.type.value === 'wedding';
+        const fallbackSrc = isWedding ? 'audio/audio.mp3' : 'assets/music.mp3';
+        if (audioElement.getAttribute('src') !== fallbackSrc) {
+          audioElement.setAttribute('src', fallbackSrc);
+          audioElement.load();
+          if (isInvitationOpened) {
+            playAudio();
+          }
+        }
+      });
+    }
+
+    // Jalankan segera saat DOM siap tanpa menunggu seluruh gambar/iframe selesai diunduh
+    document.addEventListener("DOMContentLoaded", function () {
+      if (typeof AOS !== "undefined") {
+        AOS.init({ once: true });
+      }
       updateCountdown("2026-05-20T11:00");
 
-      // Buka modal sampul otomatis
-      const klikModalBtn = document.getElementById("klikmodal");
-      if (klikModalBtn) klikModalBtn.click();
+      // Tampilkan modal sampul pembuka seketika
+      const modalEl = document.getElementById("exampleModal");
+      if (modalEl && typeof bootstrap !== "undefined") {
+        const coverModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        coverModal.show();
+      }
 
       // Muat data dinamis dari Google Apps Script
       fetch(`${GAS_API_URL}?action=getSettings`)
@@ -643,9 +683,11 @@
     });
 
     function renderPage() {
-      // Warna Tema (gunakan warna khas Tema #8785a2 kecuali diubah khusus selain default lama #d4af37)
+      // Warna Tema
       if (settings.primary_color && settings.primary_color.value && settings.primary_color.value.toLowerCase() !== '#d4af37') {
-        document.documentElement.style.setProperty('--berem', settings.primary_color.value);
+        const customColor = settings.primary_color.value;
+        document.documentElement.style.setProperty('--berem', customColor);
+        document.querySelectorAll('.wave-stop').forEach(stop => stop.setAttribute('stop-color', customColor));
       }
 
       const isWedding = !settings.type || settings.type.value === 'wedding';
@@ -656,14 +698,14 @@
       const khitanName = (settings.khitan_name && settings.khitan_name.value) || 'Nama Anak';
 
       const shortNames = isWedding ? `${groomNick} & ${brideNick}` : khitanName;
-      const modalNamesHtml = isWedding ? `${groomFull} <br/>&amp;<br/> ${brideFull}` : khitanName;
+      const modalNamesHtml = isWedding ? `${escapeHtml(groomFull)} <br/>&amp;<br/> ${escapeHtml(brideFull)}` : escapeHtml(khitanName);
 
       document.getElementById('page-title').innerText = `${shortNames} | Undangan Digital`;
       document.getElementById('open-names').innerHTML = modalNamesHtml;
       document.getElementById('hero-names').innerText = shortNames;
-      document.getElementById('footer-names').innerHTML = isWedding ? `${groomFull} <br/>&amp;<br/> ${brideFull}` : khitanName;
+      document.getElementById('footer-names').innerHTML = modalNamesHtml;
 
-      // Gambar Sampul & Hero
+      // Gambar Sampul, Hero & Penutup
       const heroImgUrl = toRaw(settings.hero_image && settings.hero_image.value) || 'img/img7.png';
       const coverImgUrl = toRaw((settings.cover_image && settings.cover_image.value) || (settings.hero_image && settings.hero_image.value)) || 'img/img3.jpg';
       const closingImgUrl = toRaw((settings.closing_image && settings.closing_image.value) || (settings.hero_image && settings.hero_image.value)) || 'img/img10.jpg';
@@ -689,6 +731,8 @@
         document.getElementById('open-title').innerText = "The Wedding of";
         document.getElementById('hero-title').innerText = "The Wedding of";
         document.getElementById('intro-text').innerText = "Kami mengundang Bapak/Ibu/Saudara/i serta kerabat sekalian untuk menghadiri acara pernikahan kami";
+        document.getElementById('ayat-text').innerText = '"Dan diantara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir"';
+        document.getElementById('ayat-source').innerText = "- QS. Ar-Rum 21 -";
 
         document.getElementById('wedding-ui').classList.remove('hidden');
         document.getElementById('khitan-ui').classList.add('hidden');
@@ -799,7 +843,6 @@
 
       document.getElementById('gift-bank').innerText = bankName;
       document.getElementById('rek1').value = accNum;
-      document.getElementById('gift-acc').innerText = accNum;
       document.getElementById('gift-name').innerText = accHolder;
 
       const logoSrc = getBankLogo(bankName);
@@ -833,24 +876,14 @@
         document.getElementById('turut-mengundang-text').innerText = settings.turut_mengundang.value;
       }
 
-      // Musik Latar (Otomatis menyesuaikan jenis undangan: wedding -> audio/audio.mp3, khitan -> assets/music.mp3)
-      const audioEl = document.getElementById('lagu');
-      const customMusic = settings.music_url && settings.music_url.value ? settings.music_url.value.trim() : '';
-      const isDefaultAudio = !customMusic || customMusic === 'audio/audio.mp3' || customMusic === 'assets/music.mp3';
-      const activeMusicUrl = isDefaultAudio
-        ? (isWedding ? 'audio/audio.mp3' : 'assets/music.mp3')
-        : toRaw(customMusic);
-
-      // Hanya ubah src jika path audio berbeda agar tidak memutus musik yang sudah diputar saat tombol Buka Undangan diklik
-      if (audioEl.getAttribute('src') !== activeMusicUrl) {
-        const shouldPlay = !audioEl.paused || isInvitationOpened;
-        audioEl.setAttribute('src', activeMusicUrl);
-        audioEl.load();
-        if (shouldPlay) {
+      // Musik Latar: Wedding -> audio/audio.mp3, Khitan -> assets/music.mp3
+      const activeMusicUrl = isWedding ? 'audio/audio.mp3' : 'assets/music.mp3';
+      if (audioElement && audioElement.getAttribute('src') !== activeMusicUrl) {
+        audioElement.setAttribute('src', activeMusicUrl);
+        audioElement.load();
+        if (isInvitationOpened) {
           playAudio();
         }
-      } else if (isInvitationOpened && audioEl.paused) {
-        playAudio();
       }
 
       // Visibilitas Kolom
@@ -885,6 +918,7 @@
         method: 'POST',
         body: JSON.stringify({ name: name, message: fullMessage })
       })
+        .then(res => res.json())
         .then(() => {
           document.getElementById('wish-msg-input').value = '';
           btn.innerText = "Kirim RSVP & Ucapan";
@@ -923,7 +957,7 @@
 
             const bracketMatch = cleanMsg.match(/\[(.*?)\]\s*$/);
             if (bracketMatch) {
-              const statusText = bracketMatch[1];
+              const statusText = escapeHtml(bracketMatch[1]);
               cleanMsg = cleanMsg.replace(bracketMatch[0], '').trim();
               if (statusText.startsWith('Hadir')) {
                 attendBadge = `<span class="badge-attend" style="background: #34c759;">${statusText}</span>`;
@@ -936,13 +970,13 @@
 
             const div = document.createElement('div');
             div.className = 'wish-box';
-            div.innerHTML = `<h4><span>${w.name}</span> ${attendBadge}</h4><p>${cleanMsg}</p>`;
+            div.innerHTML = `<h4><span>${escapeHtml(w.name)}</span> ${attendBadge}</h4><p>${escapeHtml(cleanMsg)}</p>`;
             container.appendChild(div);
           });
         })
         .catch(() => {
           const container = document.getElementById('wishes-container');
-          container.innerHTML = '';
+          if (container) container.innerHTML = '';
         });
     }
 
@@ -972,4 +1006,3 @@
 </body>
 
 </html>
-

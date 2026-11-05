@@ -42,14 +42,22 @@
             <a href="guest.html">Kelola Tamu</a>
         </div>
 
-        <!-- Tipe Undangan -->
+        <!-- Tipe Undangan & Tema -->
         <div class="card">
-            <div class="row">
-                <label style="color: #1c1c1e; font-size: 15px; margin: 0;">Jenis Undangan</label>
-                <select id="type" style="width: auto;" onchange="toggleFields()">
-                    <option value="wedding">Pernikahan</option>
-                    <option value="khitan">Khitanan</option>
-                </select>
+            <div class="form-group">
+                <div class="row">
+                    <label style="color: #1c1c1e; font-size: 15px; margin: 0;">Jenis Undangan</label>
+                    <select id="type" style="width: auto;" onchange="toggleFields()">
+                        <option value="wedding">Pernikahan</option>
+                        <option value="khitan">Khitanan</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <label style="color: #1c1c1e; font-size: 15px; margin: 0;">Warna Utama Tema</label>
+                    <input type="color" id="primary_color" value="#8785a2" style="width: 60px; height: 38px; padding: 2px; cursor: pointer;">
+                </div>
             </div>
         </div>
 
@@ -117,7 +125,7 @@
             <div class="form-group"><label>URL Foto Sampul Popup (Kosongkan untuk img/img3.jpg)</label><input type="text" id="cover_image" placeholder="img/img3.jpg atau URL foto" onchange="preview(this)"></div>
             <div class="form-group"><label>URL Foto Background Header (Kosongkan untuk img/img7.png)</label><input type="text" id="hero_image" placeholder="img/img7.png atau URL foto" onchange="preview(this)"></div>
             <div class="form-group"><label>URL Foto Salam Penutup (Kosongkan untuk img/img10.jpg)</label><input type="text" id="closing_image" placeholder="img/img10.jpg atau URL foto" onchange="preview(this)"></div>
-            <div class="form-group"><label>URL Musik (.mp3 — Otomatis: Pernikahan = audio/audio.mp3, Khitanan = assets/music.mp3)</label><input type="text" id="music_url" placeholder="Kosongkan untuk musik otomatis sesuai jenis undangan"></div>
+            <div class="form-group"><label>File Musik (.mp3 — Otomatis: Pernikahan = audio/audio.mp3, Khitanan = assets/music.mp3)</label><input type="text" id="music_url" readonly style="background: #f4f4f8; color: #6c6c70; cursor: not-allowed;" value="audio/audio.mp3"></div>
             <div class="form-group">
                 <label>Galeri Foto Carousel (Masukkan URL atau path lokal)</label>
                 <input type="text" id="gallery_1" placeholder="Foto 1 (Default: img/img2.jpg)" style="margin-bottom: 6px;" onchange="preview(this)">
@@ -191,6 +199,18 @@
             }
         }
 
+        function normalizeDateTimeLocal(val) {
+            if (!val) return '';
+            const str = String(val).trim();
+            // Sudah berformat YYYY-MM-DDTHH:mm
+            if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(str)) return str;
+            // Konversi ISO string dari Google Sheets (misal 2026-05-20T01:00:00.000Z) ke waktu lokal YYYY-MM-DDTHH:mm
+            const d = new Date(str);
+            if (isNaN(d.getTime())) return str.slice(0, 16);
+            const pad = n => String(n).padStart(2, '0');
+            return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        }
+
         function loadData() {
             fetch(`${GAS_API_URL}?action=getSettings`)
                 .then(res => res.json())
@@ -198,9 +218,18 @@
                     Object.keys(data).forEach(key => {
                         const el = document.getElementById(key);
                         if (el) {
-                            if (el.type === 'checkbox') el.checked = data[key].visible;
-                            else el.value = data[key].value;
-                            if (el.onchange) el.onchange();
+                            if (el.type === 'checkbox') {
+                                el.checked = Boolean(data[key].visible);
+                            } else if (el.type === 'datetime-local') {
+                                el.value = normalizeDateTimeLocal(data[key].value);
+                            } else if (el.type === 'color') {
+                                el.value = data[key].value || '#8785a2';
+                            } else {
+                                el.value = data[key].value !== undefined ? data[key].value : '';
+                            }
+                            if (typeof el.onchange === 'function' && el.id !== 'type') {
+                                el.onchange();
+                            }
                         }
                     });
                     toggleFields();
@@ -213,13 +242,10 @@
             document.getElementById('wedding-fields').style.display = t === 'wedding' ? 'block' : 'none';
             document.getElementById('khitan-fields').style.display = t === 'khitan' ? 'block' : 'none';
 
-            // Sesuaikan musik default otomatis berdasarkan jenis undangan
+            // Sesuaikan musik otomatis berdasarkan jenis undangan (wedding -> audio/audio.mp3, khitan -> assets/music.mp3)
             const musicInput = document.getElementById('music_url');
             if (musicInput) {
-                const val = musicInput.value.trim();
-                if (!val || val === 'audio/audio.mp3' || val === 'assets/music.mp3') {
-                    musicInput.value = t === 'wedding' ? 'audio/audio.mp3' : 'assets/music.mp3';
-                }
+                musicInput.value = t === 'wedding' ? 'audio/audio.mp3' : 'assets/music.mp3';
             }
         }
 
@@ -242,12 +268,17 @@
             fetch(`${GAS_API_URL}?action=saveSettings`, {
                 method: 'POST',
                 body: JSON.stringify(payload)
-            }).then(() => {
+            })
+            .then(res => res.json())
+            .then(result => {
+                if (result && result.status === 'error') {
+                    throw new Error(result.message || 'Terjadi kesalahan pada server.');
+                }
                 alert("Pengaturan Berhasil Disimpan!");
                 btn.innerText = "Simpan Semua Perubahan";
                 btn.disabled = false;
             }).catch(err => {
-                alert("Gagal menyimpan: " + err);
+                alert("Gagal menyimpan: " + err.message);
                 btn.innerText = "Simpan Semua Perubahan";
                 btn.disabled = false;
             });

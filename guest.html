@@ -127,23 +127,50 @@
                     }
                     list.innerHTML = '';
                     guests.forEach(g => {
-                        const safeName = (g.name || '').replace(/'/g, "\\'");
-                        const safePhone = (g.phone || '').toString().replace(/'/g, "\\'");
+                        const guestName = String(g.name || '');
+                        const guestPhone = String(g.phone || '');
                         const div = document.createElement('div');
                         div.className = 'guest-item';
-                        div.innerHTML = `
-                            <div class="guest-info">
-                                <h3>${g.name}</h3>
-                                <p>${g.phone}</p>
-                            </div>
-                            <div class="actions">
-                                <button class="btn btn-copy" onclick="copyLink('${safeName}')">Salin Link</button>
-                                <button class="btn btn-wa" onclick="sendWA('${safeName}', '${safePhone}')">Kirim WA</button>
-                                <button class="btn btn-del" onclick="deleteGuest(${g.id})">Hapus</button>
-                            </div>
-                        `;
+
+                        const infoDiv = document.createElement('div');
+                        infoDiv.className = 'guest-info';
+                        const h3 = document.createElement('h3');
+                        h3.textContent = guestName;
+                        const p = document.createElement('p');
+                        p.textContent = guestPhone;
+                        infoDiv.appendChild(h3);
+                        infoDiv.appendChild(p);
+
+                        const actionsDiv = document.createElement('div');
+                        actionsDiv.className = 'actions';
+
+                        const btnCopy = document.createElement('button');
+                        btnCopy.className = 'btn btn-copy';
+                        btnCopy.textContent = 'Salin Link';
+                        btnCopy.addEventListener('click', () => copyLink(guestName));
+
+                        const btnWa = document.createElement('button');
+                        btnWa.className = 'btn btn-wa';
+                        btnWa.textContent = 'Kirim WA';
+                        btnWa.addEventListener('click', () => sendWA(guestName, guestPhone));
+
+                        const btnDel = document.createElement('button');
+                        btnDel.className = 'btn btn-del';
+                        btnDel.textContent = 'Hapus';
+                        btnDel.addEventListener('click', () => deleteGuest(g.id));
+
+                        actionsDiv.appendChild(btnCopy);
+                        actionsDiv.appendChild(btnWa);
+                        actionsDiv.appendChild(btnDel);
+
+                        div.appendChild(infoDiv);
+                        div.appendChild(actionsDiv);
                         list.appendChild(div);
                     });
+                })
+                .catch(err => {
+                    console.error("Gagal memuat daftar tamu:", err);
+                    list.innerHTML = '<p style="text-align: center; color: #ff3b30;">Gagal memuat daftar tamu.</p>';
                 });
         }
 
@@ -152,16 +179,22 @@
             const phone = document.getElementById('guestPhone').value.trim();
             if (!name || !phone) return alert('Isi nama dan nomor WA!');
 
-            document.getElementById('addBtn').disabled = true;
+            const addBtn = document.getElementById('addBtn');
+            addBtn.disabled = true;
             fetch(`${GAS_API_URL}?action=addGuest`, {
                 method: 'POST',
                 body: JSON.stringify({ name: name, phone: phone })
             })
+            .then(res => res.json())
             .then(() => {
                 document.getElementById('guestName').value = '';
                 document.getElementById('guestPhone').value = '';
-                document.getElementById('addBtn').disabled = false;
+                addBtn.disabled = false;
                 refreshList();
+            })
+            .catch(err => {
+                alert('Gagal menambah tamu: ' + err);
+                addBtn.disabled = false;
             });
         }
 
@@ -170,16 +203,37 @@
                 fetch(`${GAS_API_URL}?action=deleteGuest`, {
                     method: 'POST',
                     body: JSON.stringify({ id: id })
-                }).then(refreshList);
+                })
+                .then(res => res.json())
+                .then(refreshList)
+                .catch(err => alert('Gagal menghapus tamu: ' + err));
             }
         }
 
         function copyLink(name) {
             const baseUrl = window.location.href.split('/').slice(0, -1).join('/');
             const invLink = `${baseUrl}/index.html?to=${encodeURIComponent(name)}`;
-            navigator.clipboard.writeText(invLink).then(() => {
-                alert(`Link undangan untuk ${name} berhasil disalin:\n${invLink}`);
-            });
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(invLink).then(() => {
+                    alert(`Link undangan untuk ${name} berhasil disalin:\n${invLink}`);
+                }).catch(() => fallbackCopyLink(invLink, name));
+            } else {
+                fallbackCopyLink(invLink, name);
+            }
+        }
+
+        function fallbackCopyLink(invLink, name) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = invLink;
+            tempInput.setAttribute('readonly', '');
+            tempInput.style.position = 'fixed';
+            tempInput.style.top = '-9999px';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert(`Link undangan untuk ${name} berhasil disalin:\n${invLink}`);
         }
 
         function sendWA(name, phone) {
