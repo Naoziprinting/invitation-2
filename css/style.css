@@ -6,16 +6,18 @@
   --wakwak: #ffe2e2;
   --fee: #f6f6f6;
   --kulit: #ffc7c7;
-  --pink: rgba(255, 199, 199, 0.85);
+  --pink: rgba(255, 199, 199, 0.9);
 }
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 body {
   background-color: var(--wakwak);
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 .font-dancing {
@@ -55,15 +57,18 @@ body {
 }
 
 .fs-60 {
-  font-size: 60px;
+  font-size: 3.5rem;
+  line-height: 1.2;
 }
 
 .fs-45 {
-  font-size: 45px;
+  font-size: 2.6rem;
+  line-height: 1.25;
 }
 
 .fs-40 {
-  font-size: 40px;
+  font-size: 2.4rem;
+  line-height: 1.25;
 }
 
 .scale {
@@ -82,8 +87,8 @@ body {
   text-align: center;
   font-weight: 700;
   color: #333;
-  width: auto;
-  max-width: 220px;
+  width: 100%;
+  max-width: 240px;
 }
 
 .hidden {
@@ -92,16 +97,54 @@ body {
 
 /* Profile & Closing circular images */
 .profile-circle {
-  width: 200px;
-  height: 200px;
+  width: 190px;
+  height: 190px;
   object-fit: cover;
   border: 5px solid #ffffff;
+}
+
+/* SimplyCountdown Responsive Layout */
+.simply-countdown {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 1.5rem auto 0;
+}
+
+.simply-countdown > .simply-section {
+  float: none !important;
+  width: 95px !important;
+  height: 95px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--pink);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.simply-countdown > .simply-section .simply-amount {
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #2d2d2d;
+}
+
+.simply-countdown > .simply-section .simply-word {
+  font-size: 0.78rem !important;
+  text-transform: capitalize;
+  color: #444;
 }
 
 /* Map Responsive */
 .map-responsive {
   overflow: hidden;
-  padding-bottom: 56.25%;
+  padding-bottom: 65%;
   position: relative;
   height: 0;
   border-radius: 16px;
@@ -119,9 +162,9 @@ body {
 /* Owl Carousel items */
 .owl-carousel .item img {
   width: 100%;
-  height: 320px;
+  height: 300px;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 14px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
 
@@ -131,11 +174,11 @@ body {
   max-height: 420px;
   overflow-y: auto;
   text-align: left;
-  padding-right: 6px;
+  padding-right: 4px;
 }
 
 .wish-list::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 
 .wish-list::-webkit-scrollbar-track {
@@ -150,7 +193,7 @@ body {
 
 .wish-box {
   background: var(--fee);
-  padding: 14px 18px;
+  padding: 14px 16px;
   border-radius: 12px;
   margin-bottom: 12px;
   border-left: 5px solid var(--berem);
@@ -158,7 +201,7 @@ body {
 }
 
 .wish-box h4 {
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 700;
   color: #333;
   margin-bottom: 4px;
@@ -187,17 +230,17 @@ body {
 /* Floating Bottom Navigation */
 .bottom-nav {
   position: fixed;
-  bottom: 18px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding: 8px 18px;
+  padding: 7px 16px;
   border-radius: 40px;
   display: flex;
-  gap: 14px;
-  box-shadow: 0 10px 30px rgba(135, 133, 162, 0.3);
+  gap: 12px;
+  box-shadow: 0 8px 25px rgba(135, 133, 162, 0.32);
   z-index: 1030;
   border: 1px solid rgba(135, 133, 162, 0.25);
 }
@@ -222,70 +265,131 @@ body {
   transform: translateY(-3px);
 }
 
+/* Floating Audio Control (Tidak menabrak Bottom Nav di Smartphone) */
+.audio-floating {
+  position: fixed;
+  bottom: 74px;
+  right: 16px;
+  z-index: 1035;
+}
+
 /* Modal Cover Styling */
 #front-image img {
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   object-fit: cover;
 }
 
-@media (max-width: 640px) {
-  h1 {
-    font-size: 2.2rem !important;
-  }
+#front-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 2rem 1.25rem;
+}
+
+/* Tablet & Smartphone Adaptation */
+@media (max-width: 767.98px) {
   #front-image {
     display: none;
   }
+
   #front-text {
-    padding-top: 32%;
-    height: 100vh;
-    background-image: url(../img/img3-foreground.jpg);
+    background-image: linear-gradient(
+        to bottom,
+        rgba(255, 226, 226, 0.65),
+        rgba(255, 226, 226, 0.88)
+      ),
+      url(../img/img3-foreground.jpg);
     background-size: cover;
     background-position: center;
+    padding: 2rem 1.25rem;
+  }
+
+  .fs-60 {
+    font-size: 2.5rem;
+  }
+
+  .fs-45 {
+    font-size: 2.1rem;
+  }
+
+  .fs-40 {
+    font-size: 2rem;
   }
 }
 
-@media (max-width: 992px) {
-  html {
-    font-size: 75%;
-  }
-
-  .simply-countdown > .simply-section {
-    padding: 70px;
-  }
-}
-
-/* tablet */
-@media (max-width: 768px) {
-  html {
-    font-size: 65%;
-  }
-
-  .simply-countdown > .simply-section {
-    padding: 60px;
-    margin: 5px;
-  }
-}
-
-/* mobile phone */
+/* Smartphone Portrait (< 576px) */
 @media (max-width: 576px) {
   html {
-    font-size: 60%;
+    font-size: 15px; /* Tetap nyaman dibaca di HP & tidak memicu auto-zoom form di iOS */
+  }
+
+  .fs-60 {
+    font-size: 2.2rem !important;
+  }
+
+  .fs-45 {
+    font-size: 1.95rem !important;
+  }
+
+  .fs-40 {
+    font-size: 1.85rem !important;
+  }
+
+  .profile-circle {
+    width: 160px;
+    height: 160px;
+  }
+
+  .simply-countdown {
+    gap: 8px;
+    flex-wrap: nowrap;
   }
 
   .simply-countdown > .simply-section {
-    padding: 45px;
-    margin: 3px;
+    width: 70px !important;
+    height: 70px !important;
+  }
+
+  .simply-countdown > .simply-section .simply-amount {
+    font-size: 1.25rem !important;
+  }
+
+  .simply-countdown > .simply-section .simply-word {
+    font-size: 0.7rem !important;
+  }
+
+  .owl-carousel .item img {
+    height: 250px;
+  }
+
+  .map-responsive {
+    padding-bottom: 80%;
+  }
+
+  /* Mencegah auto-zoom di Safari iOS saat mengetik form */
+  .form-control,
+  .form-select {
+    font-size: 16px !important;
   }
 
   .bottom-nav {
-    padding: 6px 12px;
-    gap: 8px;
+    padding: 6px 14px;
+    gap: 10px;
     bottom: 12px;
   }
 
   .bottom-nav a {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .audio-floating {
+    bottom: 66px;
+    right: 12px;
   }
 }
