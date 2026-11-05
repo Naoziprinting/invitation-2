@@ -686,12 +686,13 @@
       const khitanName = (settings.khitan_name && settings.khitan_name.value) || 'Nama Anak';
 
       const shortNames = isWedding ? `${groomNick} & ${brideNick}` : khitanName;
-      const modalNamesHtml = isWedding ? `${escapeHtml(groomFull)} <br/>&amp;<br/> ${escapeHtml(brideFull)}` : escapeHtml(khitanName);
+      const openNamesHtml = isWedding ? `${escapeHtml(groomNick)} <br/>&amp;<br/> ${escapeHtml(brideNick)}` : escapeHtml(khitanName);
+      const footerNamesHtml = isWedding ? `${escapeHtml(groomNick)} &amp; ${escapeHtml(brideNick)}` : escapeHtml(khitanName);
 
       document.getElementById('page-title').innerText = `${shortNames} | Undangan Digital`;
-      document.getElementById('open-names').innerHTML = modalNamesHtml;
+      document.getElementById('open-names').innerHTML = openNamesHtml;
       document.getElementById('hero-names').innerText = shortNames;
-      document.getElementById('footer-names').innerHTML = modalNamesHtml;
+      document.getElementById('footer-names').innerHTML = footerNamesHtml;
 
       // Gambar Sampul, Hero & Penutup
       const heroImgUrl = toRaw(settings.hero_image && settings.hero_image.value) || 'img/img7.png';
