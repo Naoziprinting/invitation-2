@@ -82,16 +82,21 @@ if (salin1) {
 }
 
 // Audio Player Control
-const lagu = document.getElementById("lagu");
 function playAudio() {
+  const lagu = document.getElementById("lagu");
   if (!lagu) return;
-  lagu.play().catch((e) => console.log("Auto-play prevented:", e));
+  const playPromise = lagu.play();
+  if (playPromise !== undefined) {
+    playPromise.catch((e) => console.log("Auto-play prevented:", e));
+  }
 }
 function stopAudio() {
+  const lagu = document.getElementById("lagu");
   if (!lagu) return;
   lagu.pause();
 }
 function toggleAudio() {
+  const lagu = document.getElementById("lagu");
   if (!lagu) return;
   if (lagu.paused) {
     playAudio();
