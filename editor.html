@@ -102,13 +102,35 @@
             <div class="form-group">
                 <label>Acara 1 (Akad / Utama)</label>
                 <input type="text" id="event_1_name" placeholder="Nama Acara (Contoh: Akad Nikah)">
-                <input type="datetime-local" id="event_1_date" style="margin-top: 6px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+                    <div>
+                        <small style="color: #666; font-size: 11px;">Mulai (Tanggal & Jam)</small>
+                        <input type="datetime-local" id="event_1_date">
+                    </div>
+                    <div>
+                        <small style="color: #666; font-size: 11px;">Selesai (Opsional - Multi-hari / Rentang Jam)</small>
+                        <input type="datetime-local" id="event_1_date_end">
+                    </div>
+                </div>
+                <input type="text" id="event_1_custom_date" placeholder="Teks Tanggal Bebas (Opsional, contoh: Jumat & Sabtu, 20-21 Mei 2026)" style="margin-top: 6px;">
+                <input type="text" id="event_1_custom_time" placeholder="Teks Waktu Bebas (Opsional, contoh: Pukul 09:00 WITA - Selesai)" style="margin-top: 6px;">
                 <input type="text" id="event_1_loc" placeholder="Lokasi Acara 1" style="margin-top: 6px;">
             </div>
-            <div class="form-group">
-                <label>Acara 2 (Resepsi / Tambahan)</label>
+            <div class="form-group" id="event-2-group" style="transition: opacity 0.3s ease;">
+                <label>Acara 2 (Resepsi / Acara Sekunder)</label>
                 <input type="text" id="event_2_name" placeholder="Nama Acara (Contoh: Resepsi)">
-                <input type="datetime-local" id="event_2_date" style="margin-top: 6px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+                    <div>
+                        <small style="color: #666; font-size: 11px;">Mulai (Tanggal & Jam)</small>
+                        <input type="datetime-local" id="event_2_date">
+                    </div>
+                    <div>
+                        <small style="color: #666; font-size: 11px;">Selesai (Opsional - Multi-hari / Rentang Jam)</small>
+                        <input type="datetime-local" id="event_2_date_end">
+                    </div>
+                </div>
+                <input type="text" id="event_2_custom_date" placeholder="Teks Tanggal Bebas (Opsional, contoh: Sabtu - Minggu, 21-22 Mei 2026)" style="margin-top: 6px;">
+                <input type="text" id="event_2_custom_time" placeholder="Teks Waktu Bebas (Opsional, contoh: Pukul 11:00 WITA - Selesai)" style="margin-top: 6px;">
                 <input type="text" id="event_2_loc" placeholder="Lokasi Acara 2" style="margin-top: 6px;">
                 <input type="text" id="event_2_entertainment" placeholder="Hiburan (Contoh: Electone)" style="margin-top: 6px;">
             </div>
@@ -158,6 +180,9 @@
         <div class="card">
             <div class="form-group">
                 <div class="row"><span>Waktu & Lokasi (Save The Date)</span><label class="switch"><input type="checkbox" id="sec_events_v" checked><span class="slider"></span></label></div>
+            </div>
+            <div class="form-group">
+                <div class="row"><span>Acara Sekunder (Resepsi/Acara 2)</span><label class="switch"><input type="checkbox" id="sec_event_2_v" checked onchange="toggleEvent2Editor()"><span class="slider"></span></label></div>
             </div>
             <div class="form-group">
                 <div class="row"><span>Galeri Foto</span><label class="switch"><input type="checkbox" id="sec_gallery_v" checked><span class="slider"></span></label></div>
@@ -234,8 +259,17 @@
                         }
                     });
                     toggleFields();
+                    toggleEvent2Editor();
                 })
                 .catch(err => console.error("Gagal memuat pengaturan:", err));
+        }
+
+        function toggleEvent2Editor() {
+            const sw = document.getElementById('sec_event_2_v');
+            const grp = document.getElementById('event-2-group');
+            if (sw && grp) {
+                grp.style.opacity = sw.checked ? '1' : '0.45';
+            }
         }
 
         function toggleFields() {

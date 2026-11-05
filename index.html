@@ -36,6 +36,13 @@
     </defs>
   </svg>
 
+  <!-- Preloader Sinkronisasi Backend start -->
+  <div id="app-loading" aria-live="polite">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Menyiapkan Undangan...</div>
+  </div>
+  <!-- Preloader Sinkronisasi Backend end -->
+
   <!-- lagu start -->
   <audio loop preload="auto" id="lagu" src="audio/audio.mp3"></audio>
   <!-- lagu end -->
@@ -216,7 +223,7 @@
             <p id="event-1-loc" class="m-0 p-0 mt-1">Rumah Mempelai Wanita Desa Bai, Kec. Nuangan Boltim</p>
           </div>
         </div>
-        <div class="col-md-6 col-12 py-3" id="card-2" data-aos="zoom-in" data-aos-duration="1300" data-aos-delay="500">
+        <div class="col-md-6 col-12 py-3 sec_event_2_v" id="card-2" data-aos="zoom-in" data-aos-duration="1300" data-aos-delay="500">
           <div class="card p-4 shadow bg-fee h-100 rounded-4">
             <h1 id="event-2-name" class="font-dancing mb-3 fs-40">Resepsi</h1>
             <p id="event-2-date" class="fw-bold p-0 m-0">Sabtu, 8 Februari 2025</p>
@@ -639,33 +646,135 @@
       return "";
     }
 
-    // Jalankan segera saat DOM siap tanpa menunggu seluruh gambar/iframe selesai diunduh
-    document.addEventListener("DOMContentLoaded", function () {
-      if (typeof AOS !== "undefined") {
-        AOS.init({ once: true });
+    // Helper Pemformatan Tanggal Fleksibel (Tunggal, Multi-Hari, Rentang & Bebas)
+    function formatEventDate(startVal, endVal, customText) {
+      if (customText && customText.trim()) {
+        return customText.trim();
       }
-      updateCountdown("2026-05-20T11:00");
+      if (!startVal) return '';
 
-      // Tampilkan modal sampul pembuka seketika
+      const d1 = new Date(startVal);
+      if (isNaN(d1.getTime())) {
+        return String(startVal).trim();
+      }
+
+      const d2 = endVal ? new Date(endVal) : null;
+      const isEndValid = d2 && !isNaN(d2.getTime());
+
+      // Jika tanggal akhir tidak ada atau di hari yang sama
+      if (!isEndValid || d1.toDateString() === d2.toDateString()) {
+        return d1.toLocaleDateString('id-ID', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
+      }
+
+      // Format multi-hari
+      const dayName1 = d1.toLocaleDateString('id-ID', { weekday: 'long' });
+      const dayName2 = d2.toLocaleDateString('id-ID', { weekday: 'long' });
+      const dayNum1 = d1.getDate();
+      const dayNum2 = d2.getDate();
+      const month1 = d1.toLocaleDateString('id-ID', { month: 'long' });
+      const month2 = d2.toLocaleDateString('id-ID', { month: 'long' });
+      const year1 = d1.getFullYear();
+      const year2 = d2.getFullYear();
+
+      if (month1 === month2 && year1 === year2) {
+        return `${dayName1} - ${dayName2}, ${dayNum1} - ${dayNum2} ${month1} ${year1}`;
+      }
+      if (year1 === year2) {
+        return `${dayName1}, ${dayNum1} ${month1} - ${dayName2}, ${dayNum2} ${month2} ${year1}`;
+      }
+      return `${dayName1}, ${dayNum1} ${month1} ${year1} - ${dayName2}, ${dayNum2} ${month2} ${year2}`;
+    }
+
+    // Helper Pemformatan Waktu Fleksibel
+    function formatEventTime(startVal, endVal, customText, defaultSuffix = '') {
+      if (customText && customText.trim()) {
+        return customText.trim();
+      }
+      if (!startVal) return '';
+
+      const d1 = new Date(startVal);
+      if (isNaN(d1.getTime())) {
+        return String(startVal).trim();
+      }
+
+      const pad = n => String(n).padStart(2, '0');
+      const time1 = `${pad(d1.getHours())}:${pad(d1.getMinutes())}`;
+
+      const d2 = endVal ? new Date(endVal) : null;
+      if (d2 && !isNaN(d2.getTime())) {
+        const time2 = `${pad(d2.getHours())}:${pad(d2.getMinutes())}`;
+        if (time1 !== time2) {
+          return `Pukul ${time1} - ${time2} ${defaultSuffix}`.trim();
+        }
+      }
+
+      return `Pukul ${time1} ${defaultSuffix}`.trim();
+    }
+
+    // Helper untuk menyelesaikan pemuatan dan menampilkan halaman
+    function finishLoadingAndShow() {
+      const loader = document.getElementById("app-loading");
+      if (loader) {
+        loader.classList.add("fade-out");
+        setTimeout(() => {
+          loader.remove();
+        }, 550);
+      }
+
+      // Tampilkan modal sampul setelah seluruh data sinkron
       const modalEl = document.getElementById("exampleModal");
       if (modalEl && typeof bootstrap !== "undefined") {
         const coverModal = bootstrap.Modal.getOrCreateInstance(modalEl);
         coverModal.show();
       }
+    }
+
+    // Jalankan segera saat DOM siap tanpa menunggu seluruh gambar/iframe selesai diunduh
+    document.addEventListener("DOMContentLoaded", function () {
+      if (typeof AOS !== "undefined") {
+        AOS.init({ once: true });
+      }
+
+      let isDone = false;
+      const safetyTimer = setTimeout(function () {
+        if (!isDone) {
+          isDone = true;
+          console.warn("Waktu sinkronisasi melebihi batas, menampilkan konten default.");
+          renderPage();
+          finishLoadingAndShow();
+          loadWishes();
+        }
+      }, 5000);
 
       // Muat data dinamis dari Google Apps Script
       fetch(`${GAS_API_URL}?action=getSettings`)
         .then(res => res.json())
         .then(data => {
-          if (data && !data.error) {
-            settings = data;
+          if (!isDone) {
+            isDone = true;
+            clearTimeout(safetyTimer);
+            if (data && !data.error) {
+              settings = data;
+            }
             renderPage();
+            finishLoadingAndShow();
+            loadWishes();
           }
-          loadWishes();
         })
         .catch(err => {
-          console.warn("Menggunakan pengaturan bawaan tema:", err);
-          loadWishes();
+          if (!isDone) {
+            isDone = true;
+            clearTimeout(safetyTimer);
+            console.warn("Menggunakan pengaturan bawaan tema:", err);
+            renderPage();
+            finishLoadingAndShow();
+            loadWishes();
+          }
         });
     });
 
@@ -765,16 +874,16 @@
         }
       }
 
-      // Acara 1
-      if (settings.event_1_date && settings.event_1_date.value) {
-        const date1 = new Date(settings.event_1_date.value);
-        if (!isNaN(date1.getTime())) {
-          const date1Str = date1.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-          const time1Str = `Pukul ${date1.getHours().toString().padStart(2, '0')}:${date1.getMinutes().toString().padStart(2, '0')} WIB`;
-          document.getElementById('event-1-date').innerText = date1Str;
-          document.getElementById('event-1-time').innerText = time1Str;
-        }
-      }
+      // Acara 1 (Utama)
+      const e1Start = settings.event_1_date ? settings.event_1_date.value : '';
+      const e1End = settings.event_1_date_end ? settings.event_1_date_end.value : '';
+      const e1CustomDate = settings.event_1_custom_date ? settings.event_1_custom_date.value : '';
+      const e1CustomTime = settings.event_1_custom_time ? settings.event_1_custom_time.value : '';
+      const date1Str = formatEventDate(e1Start, e1End, e1CustomDate) || 'Sabtu, 8 Februari 2025';
+      const time1Str = formatEventTime(e1Start, e1End, e1CustomTime, 'WIB') || 'Pukul 08:00 WIB';
+
+      document.getElementById('event-1-date').innerText = date1Str;
+      document.getElementById('event-1-time').innerText = time1Str;
       if (settings.event_1_name && settings.event_1_name.value) {
         document.getElementById('event-1-name').innerText = settings.event_1_name.value;
       }
@@ -782,19 +891,31 @@
         document.getElementById('event-1-loc').innerText = settings.event_1_loc.value;
       }
 
-      // Acara 2
-      if (settings.event_2_date && settings.event_2_date.value) {
-        const date2 = new Date(settings.event_2_date.value);
-        if (!isNaN(date2.getTime())) {
-          const date2FullStr = date2.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-          const time2Str = `Pukul ${date2.getHours().toString().padStart(2, '0')}:${date2.getMinutes().toString().padStart(2, '0')} WIB - Selesai`;
-          document.getElementById('hero-date').innerText = date2FullStr;
-          document.getElementById('open-date').innerText = date2FullStr;
-          document.getElementById('event-2-date').innerText = date2FullStr;
-          document.getElementById('event-2-time').innerText = time2Str;
-          updateCountdown(settings.event_2_date.value);
+      // Acara 2 (Sekunder)
+      const isEvent2Active = !settings.sec_event_2_v || settings.sec_event_2_v.visible !== false;
+      const card1 = document.getElementById('card-1');
+      const card2 = document.getElementById('card-2');
+      if (card1 && card2) {
+        if (!isEvent2Active) {
+          card2.classList.add('hidden');
+          card1.classList.remove('col-md-6');
+          card1.classList.add('col-md-8', 'col-lg-6', 'mx-auto');
+        } else {
+          card2.classList.remove('hidden');
+          card1.classList.add('col-md-6');
+          card1.classList.remove('col-md-8', 'col-lg-6', 'mx-auto');
         }
       }
+
+      const e2Start = settings.event_2_date ? settings.event_2_date.value : '';
+      const e2End = settings.event_2_date_end ? settings.event_2_date_end.value : '';
+      const e2CustomDate = settings.event_2_custom_date ? settings.event_2_custom_date.value : '';
+      const e2CustomTime = settings.event_2_custom_time ? settings.event_2_custom_time.value : '';
+      const date2Str = formatEventDate(e2Start, e2End, e2CustomDate) || 'Sabtu, 8 Februari 2025';
+      const time2Str = formatEventTime(e2Start, e2End, e2CustomTime, 'WIB - Selesai') || 'Pukul 11:00 WIB - Selesai';
+
+      document.getElementById('event-2-date').innerText = date2Str;
+      document.getElementById('event-2-time').innerText = time2Str;
       if (settings.event_2_name && settings.event_2_name.value) {
         document.getElementById('event-2-name').innerText = settings.event_2_name.value;
       }
@@ -804,13 +925,20 @@
       if (settings.event_2_entertainment) {
         const entVal = settings.event_2_entertainment.value;
         const entWrap = document.getElementById('event-2-entertainment-wrap');
-        if (entVal) {
+        if (entVal && isEvent2Active) {
           document.getElementById('event-2-entertainment').innerText = entVal;
           entWrap.style.display = 'block';
         } else {
           entWrap.style.display = 'none';
         }
       }
+
+      // Tanggal Utama (Sampul Depan, Hero & Countdown)
+      const mainDateStr = isEvent2Active && e2Start ? date2Str : date1Str;
+      const countdownTargetDate = isEvent2Active && e2Start ? e2Start : (e1Start || '2026-05-20T11:00');
+      document.getElementById('open-date').innerText = mainDateStr;
+      document.getElementById('hero-date').innerText = mainDateStr;
+      updateCountdown(countdownTargetDate);
 
       // Lokasi & Google Maps
       if (settings.location_address && settings.location_address.value) {
@@ -871,7 +999,7 @@
       }
 
       // Visibilitas Kolom
-      ['sec_events_v', 'sec_gallery_v', 'sec_gift_v', 'sec_wishes_v', 'sec_turut_v'].forEach(key => {
+      ['sec_events_v', 'sec_event_2_v', 'sec_gallery_v', 'sec_gift_v', 'sec_wishes_v', 'sec_turut_v'].forEach(key => {
         if (settings[key] && settings[key].visible === false) {
           document.querySelectorAll('.' + key).forEach(el => el.classList.add('hidden'));
         } else {
