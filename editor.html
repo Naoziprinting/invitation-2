@@ -117,7 +117,7 @@
             <div class="form-group"><label>URL Foto Sampul Popup (Kosongkan untuk img/img3.jpg)</label><input type="text" id="cover_image" placeholder="img/img3.jpg atau URL foto" onchange="preview(this)"></div>
             <div class="form-group"><label>URL Foto Background Header (Kosongkan untuk img/img7.png)</label><input type="text" id="hero_image" placeholder="img/img7.png atau URL foto" onchange="preview(this)"></div>
             <div class="form-group"><label>URL Foto Salam Penutup (Kosongkan untuk img/img10.jpg)</label><input type="text" id="closing_image" placeholder="img/img10.jpg atau URL foto" onchange="preview(this)"></div>
-            <div class="form-group"><label>URL Musik (.mp3, kosongkan untuk audio/audio.mp3)</label><input type="text" id="music_url" placeholder="audio/audio.mp3"></div>
+            <div class="form-group"><label>URL Musik (.mp3 — Otomatis: Pernikahan = audio/audio.mp3, Khitanan = assets/music.mp3)</label><input type="text" id="music_url" placeholder="Kosongkan untuk musik otomatis sesuai jenis undangan"></div>
             <div class="form-group">
                 <label>Galeri Foto Carousel (Masukkan URL atau path lokal)</label>
                 <input type="text" id="gallery_1" placeholder="Foto 1 (Default: img/img2.jpg)" style="margin-bottom: 6px;" onchange="preview(this)">
@@ -212,6 +212,15 @@
             const t = document.getElementById('type').value;
             document.getElementById('wedding-fields').style.display = t === 'wedding' ? 'block' : 'none';
             document.getElementById('khitan-fields').style.display = t === 'khitan' ? 'block' : 'none';
+
+            // Sesuaikan musik default otomatis berdasarkan jenis undangan
+            const musicInput = document.getElementById('music_url');
+            if (musicInput) {
+                const val = musicInput.value.trim();
+                if (!val || val === 'audio/audio.mp3' || val === 'assets/music.mp3') {
+                    musicInput.value = t === 'wedding' ? 'audio/audio.mp3' : 'assets/music.mp3';
+                }
+            }
         }
 
         function saveData() {

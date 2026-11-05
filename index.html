@@ -833,11 +833,14 @@
         document.getElementById('turut-mengundang-text').innerText = settings.turut_mengundang.value;
       }
 
-      // Musik Latar
-      if (settings.music_url && settings.music_url.value) {
-        const audioEl = document.getElementById('lagu');
-        audioEl.src = toRaw(settings.music_url.value);
-      }
+      // Musik Latar (Otomatis menyesuaikan jenis undangan: wedding -> audio/audio.mp3, khitan -> assets/music.mp3)
+      const audioEl = document.getElementById('lagu');
+      const customMusic = settings.music_url && settings.music_url.value ? settings.music_url.value.trim() : '';
+      const isDefaultAudio = !customMusic || customMusic === 'audio/audio.mp3' || customMusic === 'assets/music.mp3';
+      const activeMusicUrl = isDefaultAudio
+        ? (isWedding ? 'audio/audio.mp3' : 'assets/music.mp3')
+        : toRaw(customMusic);
+      audioEl.src = activeMusicUrl;
 
       // Visibilitas Kolom
       ['sec_events_v', 'sec_gallery_v', 'sec_gift_v', 'sec_wishes_v', 'sec_turut_v'].forEach(key => {
