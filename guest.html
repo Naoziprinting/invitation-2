@@ -242,7 +242,7 @@
                 return;
             }
 
-            let cleanPhone = phone.replace(/\D/g, '');
+            let cleanPhone = (phone || '').replace(/\D/g, '');
             if (cleanPhone.startsWith('0')) {
                 cleanPhone = '62' + cleanPhone.substring(1);
             } else if (cleanPhone.startsWith('8')) {
@@ -256,8 +256,32 @@
             let message = template.replace(/\[nama\]/gi, name);
             message += `\n\nBuka Undangan: ${invLink}`;
 
-            const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
-            window.open(waUrl, '_blank');
+            const encodedMsg = encodeURIComponent(message);
+            const appUrl = cleanPhone 
+                ? `whatsapp://send?phone=${cleanPhone}&text=${encodedMsg}`
+                : `whatsapp://send?text=${encodedMsg}`;
+
+            const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+            if (isMobile) {
+                // Di perangkat mobile, langsung buka aplikasi WhatsApp tanpa membuka tab baru
+                window.location.href = appUrl;
+            } else {
+                // Di desktop, coba buka aplikasi WhatsApp Desktop langsung tanpa tab baru
+                const start = Date.now();
+                window.location.href = appUrl;
+                setTimeout(() => {
+                    // Jika setelah 1.2 detik jendela masih fokus (aplikasi desktop tidak terpasang)
+                    if (document.hasFocus() && Date.now() - start < 2000) {
+                        const openWeb = confirm("Aplikasi WhatsApp Desktop tidak terdeteksi. Buka melalui WhatsApp Web?");
+                        if (openWeb) {
+                            const webUrl = cleanPhone 
+                                ? `https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodedMsg}`
+                                : `https://web.whatsapp.com/send?text=${encodedMsg}`;
+                            window.location.href = webUrl;
+                        }
+                    }
+                }, 1200);
+            }
         }
     </script>
 </body>
