@@ -608,6 +608,8 @@
     }
 
     function openInvitation() {
+      const btn = document.getElementById("btn-open-invitation");
+      if (btn) btn.blur();
       isInvitationOpened = true;
       playAudio();
       if (typeof AOS !== "undefined") {
