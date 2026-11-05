@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title id="page-title">Undangan Digital | Naozi Printing</title>
+  <link rel="icon" href="img/bismillah.png" type="image/png" />
   <link rel="stylesheet" href="css/aos.css" />
   <link rel="stylesheet" href="css/bootstrap.min.css" />
   <link rel="stylesheet" href="css/owl.carousel.min.css" />
@@ -636,22 +637,6 @@
       return "";
     }
 
-    // Fallback otomatis apabila URL audio kustom gagal dimuat
-    const audioElement = document.getElementById('lagu');
-    if (audioElement) {
-      audioElement.addEventListener('error', function () {
-        const isWedding = !settings.type || settings.type.value === 'wedding';
-        const fallbackSrc = isWedding ? 'audio/audio.mp3' : 'assets/music.mp3';
-        if (audioElement.getAttribute('src') !== fallbackSrc) {
-          audioElement.setAttribute('src', fallbackSrc);
-          audioElement.load();
-          if (isInvitationOpened) {
-            playAudio();
-          }
-        }
-      });
-    }
-
     // Jalankan segera saat DOM siap tanpa menunggu seluruh gambar/iframe selesai diunduh
     document.addEventListener("DOMContentLoaded", function () {
       if (typeof AOS !== "undefined") {
@@ -690,7 +675,8 @@
         document.querySelectorAll('.wave-stop').forEach(stop => stop.setAttribute('stop-color', customColor));
       }
 
-      const isWedding = !settings.type || settings.type.value === 'wedding';
+      const rawType = (settings.type && settings.type.value ? String(settings.type.value) : 'wedding').trim().toLowerCase();
+      const isWedding = rawType !== 'khitan' && rawType !== 'khitanan';
       const groomFull = (settings.groom_name && settings.groom_name.value) || 'Muhammad Nazril Mokodompit';
       const brideFull = (settings.bride_name && settings.bride_name.value) || 'Cici Puspitasari Dakotalot';
       const groomNick = (settings.groom_nickname && settings.groom_nickname.value) || groomFull.split(' ')[0];
@@ -876,14 +862,9 @@
         document.getElementById('turut-mengundang-text').innerText = settings.turut_mengundang.value;
       }
 
-      // Musik Latar: Wedding -> audio/audio.mp3, Khitan -> assets/music.mp3
-      const activeMusicUrl = isWedding ? 'audio/audio.mp3' : 'assets/music.mp3';
-      if (audioElement && audioElement.getAttribute('src') !== activeMusicUrl) {
-        audioElement.setAttribute('src', activeMusicUrl);
-        audioElement.load();
-        if (isInvitationOpened) {
-          playAudio();
-        }
+      // Musik Latar: Wedding -> audio/audio.mp3, Khitan -> assets/music.mp3 (dengan auto-fallback di main.js)
+      if (typeof setAudioTrackByType === 'function') {
+        setAudioTrackByType(isWedding, isInvitationOpened);
       }
 
       // Visibilitas Kolom
