@@ -19,9 +19,7 @@
 
 <body>
   <!-- lagu start -->
-  <audio loop id="lagu">
-    <source id="lagu-src" src="audio/audio.mp3" type="audio/mp3" />
-  </audio>
+  <audio loop preload="auto" id="lagu" src="audio/audio.mp3"></audio>
   <!-- lagu end -->
 
   <!-- popup start -->
@@ -592,7 +590,10 @@
       });
     }
 
+    let isInvitationOpened = false;
+
     function openInvitation() {
+      isInvitationOpened = true;
       playAudio();
       AOS.refresh();
     }
@@ -840,7 +841,18 @@
       const activeMusicUrl = isDefaultAudio
         ? (isWedding ? 'audio/audio.mp3' : 'assets/music.mp3')
         : toRaw(customMusic);
-      audioEl.src = activeMusicUrl;
+
+      // Hanya ubah src jika path audio berbeda agar tidak memutus musik yang sudah diputar saat tombol Buka Undangan diklik
+      if (audioEl.getAttribute('src') !== activeMusicUrl) {
+        const shouldPlay = !audioEl.paused || isInvitationOpened;
+        audioEl.setAttribute('src', activeMusicUrl);
+        audioEl.load();
+        if (shouldPlay) {
+          playAudio();
+        }
+      } else if (isInvitationOpened && audioEl.paused) {
+        playAudio();
+      }
 
       // Visibilitas Kolom
       ['sec_events_v', 'sec_gallery_v', 'sec_gift_v', 'sec_wishes_v', 'sec_turut_v'].forEach(key => {
